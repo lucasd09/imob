@@ -5,8 +5,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { signIn } from "@/services/axios-requests";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
 
 const schema = z.object({
@@ -18,6 +18,7 @@ type formLogin = z.infer<typeof schema>;
 
 export default function FormLogin() {
   const [login, setLogin] = useState<boolean>(true);
+  const { signIn, isAuthenticated } = useContext(AuthContext);
   const router = useRouter();
 
   const {
@@ -27,10 +28,9 @@ export default function FormLogin() {
   } = useForm<formLogin>({ resolver: zodResolver(schema) });
 
   async function handleLogin({ email, password }: formLogin) {
-    const res = await signIn({ email, password });
+    const token = await signIn({ email, password });
 
-    if (res) {
-      router.refresh;
+    if (!!token) {
       router.push("/dashboard");
     } else {
       setLogin(false);
