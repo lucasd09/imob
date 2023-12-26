@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default function Dashboard() {
+export default function Owners() {
   const cookieStore = cookies();
   const token = cookieStore.get("imob-token");
 
@@ -9,5 +9,5 @@ export default function Dashboard() {
     redirect("/login");
   }
 
-  return;
+  return <div>owners</div>;
 }
