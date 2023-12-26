@@ -1,3 +1,4 @@
+import Navbar from "@/components/server-components/nav-bar";
 import Sidebar from "@/components/server-components/side-bar";
 
 export default function AppLayout({ children }: ChildrenProps) {
@@ -5,9 +6,7 @@ export default function AppLayout({ children }: ChildrenProps) {
     <div className="flex">
       <Sidebar />
       <div className="w-screen">
-        <div className="flex px-14 h-14 items-center justify-end bg-secondary border">
-          topbar
-        </div>
+        <Navbar />
         {children}
       </div>
     </div>
