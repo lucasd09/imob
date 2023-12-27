@@ -1,4 +1,4 @@
-import { setCookie, parseCookies } from "nookies";
+import { setCookie, parseCookies, destroyCookie } from "nookies";
 import axiosClient from "./axios-client";
 
 const { "imob-token": token } = parseCookies();
@@ -14,4 +14,8 @@ export async function signInRequest({ email, password }: SignInProps) {
   } catch {
     return null;
   }
+}
+
+export function logout() {
+  destroyCookie(undefined, "imob-token");
 }
