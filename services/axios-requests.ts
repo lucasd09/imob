@@ -16,6 +16,34 @@ export async function signInRequest({ email, password }: SignInProps) {
   }
 }
 
+export async function getRenters(
+  userId: number
+): Promise<RenterProps[] | undefined> {
+  try {
+    const res = await axiosClient.get(`/renters/${userId}`);
+
+    if (res.status === 200) {
+      return res.data;
+    }
+  } catch {}
+}
+
+export async function getRenter(
+  userId: number,
+  id: number
+): Promise<RenterProps | undefined> {
+  const res = await axiosClient.get(`/renters/${userId}/${id}`);
+
+  if (res.status === 200) {
+    const renter: RenterProps = {
+      id: res.data.id,
+      name: res.data.name,
+      userid: res.data.userId,
+    };
+    return renter;
+  }
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }

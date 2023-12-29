@@ -1,9 +1,10 @@
 "use client";
 import axiosClient from "@/services/axios-client";
 import { signInRequest } from "@/services/axios-requests";
-import Router from "next/router";
+import { useUserStore } from "@/stores/user-store";
 import { setCookie } from "nookies";
 import { createContext, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -17,9 +18,11 @@ type User = {
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: ChildrenProps) {
-  const [user, setUser] = useState<User | null>(null);
+  //const [user, setUser] = useState<User | null>(null);
 
-  const isAuthenticated = !!user;
+  const user = useUserStore();
+
+  const isAuthenticated = !!user.token;
 
   async function signIn({ email, password }: SignInProps) {
     const token = await signInRequest({ email, password });
@@ -31,7 +34,11 @@ export function AuthProvider({ children }: ChildrenProps) {
 
       axiosClient.defaults.headers["Authorization"] = `Bearer ${token}`;
 
-      setUser({ token });
+      const jwt = jwtDecode<JwtProps>(token);
+
+      user.updateId(jwt.sub);
+      user.updateUsername(jwt.name);
+      user.updateToken(token);
 
       return token;
     }

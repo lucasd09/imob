@@ -1,4 +1,4 @@
-import Navbar from "@/components/server-components/nav-bar";
+import Navbar from "@/components/client-components/nav-bar";
 import Sidebar from "@/components/server-components/side-bar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
