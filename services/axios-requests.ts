@@ -23,7 +23,15 @@ export async function getRenters(
     const res = await axiosClient.get(`/renters/${userId}`);
 
     if (res.status === 200) {
-      return res.data;
+      const Renters: RenterProps[] = res.data.map((item: RenterProps) => {
+        return {
+          id: item.id,
+          name: item.name,
+          email: item.email,
+          userId: item.userId,
+        };
+      });
+      return Renters;
     }
   } catch {}
 }
@@ -38,9 +46,22 @@ export async function getRenter(
     const renter: RenterProps = {
       id: res.data.id,
       name: res.data.name,
-      userid: res.data.userId,
+      email: res.data.email,
+      userId: res.data.userId,
     };
     return renter;
+  }
+}
+
+export async function createRenter(data: RenterProps, userId: number) {
+  const res = await axiosClient.post("/renters", {
+    name: data.name,
+    email: data.email,
+    user: { connect: { id: userId } },
+  });
+
+  if (res.status === 201) {
+    return res.data;
   }
 }
 

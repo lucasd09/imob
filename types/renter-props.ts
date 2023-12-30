@@ -1,5 +1,6 @@
 type RenterProps = {
-  id: number;
+  id?: number;
   name: string;
-  userid: number;
+  email: string;
+  userId?: number;
 };

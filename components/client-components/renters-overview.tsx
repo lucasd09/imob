@@ -1,20 +1,45 @@
 "use client";
 import { getRenters } from "@/services/axios-requests";
 import { useUserStore } from "@/stores/user-store";
-import { Button } from "../ui/button";
+import { DataTable } from "./data-table";
+import { ColumnDef } from "@tanstack/react-table";
+import { useEffect, useState } from "react";
+
+const columns: ColumnDef<RenterProps>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
+    accessorKey: "name",
+    header: "Nome",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+];
 
 export default function RentersOverview() {
   const user = useUserStore();
+  const [data, setData] = useState<RenterProps[] | undefined>([]);
 
-  async function fetchRenters() {
-    const renters = await getRenters(user.id);
-
-    console.log(renters);
-  }
+  useEffect(() => {
+    async function fetchRenters() {
+      try {
+        const renters = await getRenters(user.id);
+        setData(renters);
+      } catch (error) {
+        console.error("Erro ao buscar dados de locatários:", error);
+      }
+    }
+    fetchRenters();
+    console.log("asd");
+  }, [user.id]);
 
   return (
     <div>
-      <Button onClick={fetchRenters}>testar</Button>
+      <DataTable columns={columns} data={data || []} />
     </div>
   );
 }

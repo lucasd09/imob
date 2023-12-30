@@ -2,6 +2,7 @@ import Navbar from "@/components/client-components/nav-bar";
 import Sidebar from "@/components/server-components/side-bar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function AppLayout({ children }: ChildrenProps) {
   const cookieStore = cookies();
@@ -18,6 +19,7 @@ export default function AppLayout({ children }: ChildrenProps) {
         <Navbar />
         {children}
       </div>
+      <Toaster />
     </div>
   );
 }

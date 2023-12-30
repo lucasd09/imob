@@ -1,4 +1,5 @@
 import RentersOverview from "@/components/client-components/renters-overview";
+import RentersRegister from "@/components/client-components/renters-register";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,15 +15,17 @@ export default function Renters() {
           <Button>Exportar</Button>
         </div>
       </div>
-      <Tabs defaultValue="overview" className="w-fit">
-        <TabsList className="grid w-full grid-cols-2">
+      <Tabs defaultValue="overview">
+        <TabsList className="grid w-fit grid-cols-2">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="register">Cadastro</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <RentersOverview />
         </TabsContent>
-        <TabsContent value="register"></TabsContent>
+        <TabsContent value="register">
+          <RentersRegister />
+        </TabsContent>
       </Tabs>
     </div>
   );
