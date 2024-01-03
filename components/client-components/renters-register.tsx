@@ -12,6 +12,11 @@ import { useToast } from "@/components/ui/use-toast";
 const schema = z.object({
   name: z.string().min(5, "Insira um nome"),
   email: z.string().email("Email inválido"),
+  cnpjcpf: z.string().min(11, "CPF/CNPJ Inválidos"),
+  phone: z.string().min(8, "Telefone Inválido"),
+  ierg: z.string().min(9, "IE/RG inválidos"),
+  pessoa: z.enum(["FISICA", "JURIDICA"]),
+  birthdate: z.date(),
 });
 
 type form = z.infer<typeof schema>;
@@ -31,7 +36,15 @@ export default function RentersRegister() {
     useUserStore.persist.rehydrate();
 
     const renter = await createRenter(
-      { name: data.name, email: data.email },
+      {
+        name: data.name,
+        email: data.email,
+        birthdate: data.birthdate,
+        cnpjcpf: data.cnpjcpf,
+        ierg: data.ierg,
+        phone: data.phone,
+        pessoa: data.pessoa,
+      },
       user.id
     );
     console.log(renter);
@@ -45,19 +58,49 @@ export default function RentersRegister() {
       });
     }
   }
+
   return (
-    <form className="flex mt-4 space-x-4" onSubmit={handleSubmit(handleForm)}>
-      <div>
-        <Label htmlFor="name">Nome</Label>
-        <Input id="name" {...register("name")} />
-        <p className="text-red-500 text-sm">{errors.name?.message}</p>
+    <form className="flex max-w-7xl mt-4" onSubmit={handleSubmit(handleForm)}>
+      <div className="flex flex-wrap">
+        <div className="mr-4">
+          <Label htmlFor="name">Nome</Label>
+          <Input id="name" {...register("name")} />
+          <p className="text-red-500 text-sm">{errors.name?.message}</p>
+        </div>
+        <div className="mr-4">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" {...register("email")} />
+          <p className="text-red-500 text-sm">{errors.email?.message}</p>
+        </div>
+        <div className="mr-4">
+          <Label htmlFor="birthdate">Data de Nascimento</Label>
+          <Input id="birthdate" {...register("birthdate")} type="date" />
+          <p className="text-red-500 text-sm">{errors.birthdate?.message}</p>
+        </div>
+        <div className="mr-4">
+          <Label htmlFor="cnpjcpf">CNPJ/CPF</Label>
+          <Input id="cnpjcpf" {...register("cnpjcpf")} />
+          <p className="text-red-500 text-sm">{errors.cnpjcpf?.message}</p>
+        </div>
+        <div className="mr-4">
+          <Label htmlFor="ierg">IE/RG</Label>
+          <Input id="ierg" {...register("ierg")} />
+          <p className="text-red-500 text-sm">{errors.ierg?.message}</p>
+        </div>
+        <div className="mr-4">
+          <Label htmlFor="pessoa">Pessoa</Label>
+          <Input id="pessoa" {...register("pessoa")} />
+          <p className="text-red-500 text-sm">{errors.pessoa?.message}</p>
+        </div>
+        <div className="mr-4">
+          <Label htmlFor="phone">Telefone</Label>
+          <Input id="phone" {...register("phone")} />
+          <p className="text-red-500 text-sm">{errors.phone?.message}</p>
+        </div>
       </div>
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" {...register("email")} />
-        <p className="text-red-500 text-sm">{errors.email?.message}</p>
+      <div className="flex justify-end">
+        <Button className="mt-6">Salvar</Button>
       </div>
-      <Button className="mt-6">Salvar</Button>
     </form>
   );
 }

@@ -18,6 +18,14 @@ const columns: ColumnDef<RenterProps>[] = [
     accessorKey: "email",
     header: "Email",
   },
+  {
+    accessorKey: "phone",
+    header: "Telefone",
+  },
+  {
+    accessorKey: "pessoa",
+    header: "Pessoa",
+  },
 ];
 
 export default function RentersOverview() {
