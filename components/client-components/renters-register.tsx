@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { useUserStore } from "@/stores/user-store";
 import { createRenter } from "@/services/axios-requests";
 import { useToast } from "@/components/ui/use-toast";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 const schema = z.object({
   name: z.string().min(5, "Insira um nome"),
@@ -15,11 +16,25 @@ const schema = z.object({
   cnpjcpf: z.string().min(11, "CPF/CNPJ Inválidos"),
   phone: z.string().min(8, "Telefone Inválido"),
   ierg: z.string().min(9, "IE/RG inválidos"),
-  pessoa: z.enum(["FISICA", "JURIDICA"]),
-  birthdate: z.date(),
+  pessoa: z.enum(["FISICA", "JURIDICA"], {
+    required_error: "Selecione um tipo de pessoa",
+  }),
+  birthdate: z.string().refine(
+    (value) => {
+      return !isNaN(Date.parse(value));
+    },
+    {
+      message: "Data de nascimento inválida.",
+    }
+  ),
 });
 
 type form = z.infer<typeof schema>;
+
+const cbItems = [
+  { value: "FISICA", label: "Física" },
+  { value: "JURIDICA", label: "Jurídica" },
+];
 
 export default function RentersRegister() {
   const user = useUserStore();
@@ -33,8 +48,6 @@ export default function RentersRegister() {
   } = useForm<form>({ resolver: zodResolver(schema) });
 
   async function handleForm(data: form) {
-    useUserStore.persist.rehydrate();
-
     const renter = await createRenter(
       {
         name: data.name,
@@ -47,7 +60,6 @@ export default function RentersRegister() {
       },
       user.id
     );
-    console.log(renter);
 
     if (renter) {
       reset();
@@ -77,6 +89,24 @@ export default function RentersRegister() {
           <Input id="birthdate" {...register("birthdate")} type="date" />
           <p className="text-red-500 text-sm">{errors.birthdate?.message}</p>
         </div>
+        <div className="mr-4 flex flex-col justify-evenly">
+          <Label htmlFor="pessoa">Pessoa</Label>
+          <RadioGroup
+            defaultValue="FISICA"
+            className="flex"
+            {...register("pessoa")}
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="FISICA" id="FISICA" />
+              <Label htmlFor="FISICA">Física</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="JURIDICA" id="JURIDICA" />
+              <Label htmlFor="JURIDICA">Jurídica</Label>
+            </div>
+          </RadioGroup>
+          <p className="text-red-500 text-sm">{errors.pessoa?.message}</p>
+        </div>
         <div className="mr-4">
           <Label htmlFor="cnpjcpf">CNPJ/CPF</Label>
           <Input id="cnpjcpf" {...register("cnpjcpf")} />
@@ -86,11 +116,6 @@ export default function RentersRegister() {
           <Label htmlFor="ierg">IE/RG</Label>
           <Input id="ierg" {...register("ierg")} />
           <p className="text-red-500 text-sm">{errors.ierg?.message}</p>
-        </div>
-        <div className="mr-4">
-          <Label htmlFor="pessoa">Pessoa</Label>
-          <Input id="pessoa" {...register("pessoa")} />
-          <p className="text-red-500 text-sm">{errors.pessoa?.message}</p>
         </div>
         <div className="mr-4">
           <Label htmlFor="phone">Telefone</Label>

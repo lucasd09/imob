@@ -28,6 +28,11 @@ export async function getRenters(
           id: item.id,
           name: item.name,
           email: item.email,
+          phone: item.phone,
+          cnpjcpf: item.cnpjcpf,
+          pessoa: item.pessoa,
+          birthdate: item.birthdate,
+          ierg: item.ierg,
           userId: item.userId,
         };
       });
@@ -48,6 +53,11 @@ export async function getRenter(
       name: res.data.name,
       email: res.data.email,
       userId: res.data.userId,
+      birthdate: res.data.birthdate,
+      cnpjcpf: res.data.cnpjcpf,
+      ierg: res.data.ierg,
+      phone: res.data.phone,
+      pessoa: res.data.pessoa,
     };
     return renter;
   }
@@ -57,6 +67,11 @@ export async function createRenter(data: RenterProps, userId: number) {
   const res = await axiosClient.post("/renters", {
     name: data.name,
     email: data.email,
+    birthdate: data.birthdate,
+    cnpjcpf: data.cnpjcpf,
+    ierg: data.ierg,
+    phone: data.phone,
+    pessoa: data.pessoa,
     user: { connect: { id: userId } },
   });
 

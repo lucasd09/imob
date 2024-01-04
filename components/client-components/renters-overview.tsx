@@ -42,7 +42,6 @@ export default function RentersOverview() {
       }
     }
     fetchRenters();
-    console.log("asd");
   }, [user.id]);
 
   return (
