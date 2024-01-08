@@ -122,6 +122,20 @@ export async function createOwner(data: OwnerProps, userId: number) {
   }
 }
 
+export async function getProperties(userId: number) {
+  const res = await axiosClient.get(`/properties/${userId}`);
+
+  if (res.status === 200) {
+    const properties: PropertiesProps[] = res.data.map(
+      (item: PropertiesProps) => {
+        return item;
+      }
+    );
+
+    return properties;
+  }
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }
