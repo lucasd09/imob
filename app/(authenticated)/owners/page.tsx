@@ -1,3 +1,5 @@
+import OwnersOverview from "@/components/client-components/owners/owners-overview";
+import OwnersRegister from "@/components/client-components/owners/owners-register";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,13 +15,17 @@ export default function Owners() {
           <Button>Exportar</Button>
         </div>
       </div>
-      <Tabs defaultValue="account" className="w-fit">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">tab 1</TabsTrigger>
-          <TabsTrigger value="password">tab 2</TabsTrigger>
+      <Tabs defaultValue="overview">
+        <TabsList className="grid w-fit grid-cols-2">
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="register">Cadastro</TabsTrigger>
         </TabsList>
-        <TabsContent value="account"></TabsContent>
-        <TabsContent value="password"></TabsContent>
+        <TabsContent value="overview">
+          <OwnersOverview />
+        </TabsContent>
+        <TabsContent value="register">
+          <OwnersRegister />
+        </TabsContent>
       </Tabs>
     </div>
   );

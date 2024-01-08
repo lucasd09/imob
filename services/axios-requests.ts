@@ -80,6 +80,48 @@ export async function createRenter(data: RenterProps, userId: number) {
   }
 }
 
+export async function getOwners(
+  userId: number
+): Promise<OwnerProps[] | undefined> {
+  try {
+    const res = await axiosClient.get(`/owners/${userId}`);
+
+    if (res.status === 200) {
+      const owners: OwnerProps[] = res.data.map((item: OwnerProps) => {
+        return {
+          id: item.id,
+          name: item.name,
+          email: item.email,
+          phone: item.phone,
+          cnpjcpf: item.cnpjcpf,
+          pessoa: item.pessoa,
+          birthdate: item.birthdate,
+          ierg: item.ierg,
+          userId: item.userId,
+        };
+      });
+      return owners;
+    }
+  } catch {}
+}
+
+export async function createOwner(data: OwnerProps, userId: number) {
+  const res = await axiosClient.post("/owners", {
+    name: data.name,
+    email: data.email,
+    birthdate: data.birthdate,
+    cnpjcpf: data.cnpjcpf,
+    ierg: data.ierg,
+    phone: data.phone,
+    pessoa: data.pessoa,
+    user: { connect: { id: userId } },
+  });
+
+  if (res.status === 201) {
+    return res.data;
+  }
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }

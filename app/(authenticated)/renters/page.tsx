@@ -1,5 +1,5 @@
-import RentersOverview from "@/components/client-components/renters-overview";
-import RentersRegister from "@/components/client-components/renters-register";
+import RentersOverview from "@/components/client-components/renters/renters-overview";
+import RentersRegister from "@/components/client-components/renters/renters-register";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

@@ -1,11 +1,11 @@
 "use client";
-import { getRenters } from "@/services/axios-requests";
-import { useUserStore } from "@/stores/user-store";
-import { DataTable } from "./data-table";
+import { getOwners } from "@/services/axios-requests";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "../data-table";
+import { useUserStore } from "@/stores/user-store";
 import { useEffect, useState } from "react";
 
-const columns: ColumnDef<RenterProps>[] = [
+const columns: ColumnDef<OwnerProps>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -28,22 +28,21 @@ const columns: ColumnDef<RenterProps>[] = [
   },
 ];
 
-export default function RentersOverview() {
+export default function OwnersOverview() {
   const user = useUserStore();
-  const [data, setData] = useState<RenterProps[] | undefined>([]);
+  const [data, setData] = useState<OwnerProps[] | undefined>([]);
 
   useEffect(() => {
-    async function fetchRenters() {
+    async function fetchOwners() {
       try {
-        const renters = await getRenters(user.id);
-        setData(renters);
+        const owners = await getOwners(user.id);
+        setData(owners);
       } catch (error) {
-        console.error("Erro ao buscar dados de locatários:", error);
+        console.error("Erro ao buscar dados de Locadores:", error);
       }
     }
-    fetchRenters();
+    fetchOwners();
   }, [user.id]);
-
   return (
     <div>
       <DataTable columns={columns} data={data || []} />

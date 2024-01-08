@@ -1,14 +1,14 @@
 "use client";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useUserStore } from "@/stores/user-store";
-import { createRenter } from "@/services/axios-requests";
+import { createOwner } from "@/services/axios-requests";
 import { useToast } from "@/components/ui/use-toast";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 
 const schema = z.object({
   name: z.string().min(5, "Insira um nome"),
@@ -31,12 +31,7 @@ const schema = z.object({
 
 type form = z.infer<typeof schema>;
 
-const cbItems = [
-  { value: "FISICA", label: "Física" },
-  { value: "JURIDICA", label: "Jurídica" },
-];
-
-export default function RentersRegister() {
+export default function OwnersRegister() {
   const user = useUserStore();
   const { toast } = useToast();
 
@@ -48,7 +43,7 @@ export default function RentersRegister() {
   } = useForm<form>({ resolver: zodResolver(schema) });
 
   async function handleForm(data: form) {
-    const renter = await createRenter(
+    const renter = await createOwner(
       {
         name: data.name,
         email: data.email,
@@ -66,7 +61,7 @@ export default function RentersRegister() {
 
       return toast({
         title: "Sucesso",
-        description: "Locatário criado com êxito.",
+        description: "Locador criado com êxito.",
       });
     }
   }
