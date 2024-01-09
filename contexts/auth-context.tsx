@@ -1,5 +1,5 @@
 "use client";
-import axiosClient from "@/services/axios-client";
+import { axiosClient } from "@/services/axios-client";
 import { signInRequest } from "@/services/axios-requests";
 import { useUserStore } from "@/stores/user-store";
 import { setCookie } from "nookies";

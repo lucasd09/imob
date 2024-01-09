@@ -4,11 +4,14 @@ import { useUserStore } from "@/stores/user-store";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { DataTable } from "../data-table";
+import { DataTableColumnHeader } from "../column-header";
 
 const columns: ColumnDef<PropertiesProps>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
   },
   {
     accessorKey: "address",
@@ -17,6 +20,18 @@ const columns: ColumnDef<PropertiesProps>[] = [
   {
     accessorKey: "number",
     header: "Número",
+  },
+  {
+    accessorKey: "complement",
+    header: "Complemento",
+  },
+  {
+    accessorKey: "city",
+    header: "Cidade",
+  },
+  {
+    accessorKey: "uf",
+    header: "Estado",
   },
   {
     accessorKey: "avaliable",

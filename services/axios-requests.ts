@@ -1,5 +1,6 @@
 import { setCookie, parseCookies, destroyCookie } from "nookies";
-import axiosClient from "./axios-client";
+import { ZipCodeClient, axiosClient } from "./axios-client";
+import axios from "axios";
 
 const { "imob-token": token } = parseCookies();
 
@@ -134,6 +135,37 @@ export async function getProperties(userId: number) {
 
     return properties;
   }
+}
+
+export async function createProperty(data: PropertiesProps, userId: number) {
+  const res: PropertiesProps = await axiosClient.post("/properties", {
+    address: data.address,
+    number: data.number,
+    avaliable: data.avaliable,
+    complement: data.complement,
+    district: data.district,
+    uf: data.uf,
+    zipcode: data.zipcode,
+    city: data.city,
+    user: { connect: { id: userId } },
+  });
+
+  return res;
+}
+
+export async function getZipcode(zipcode: string) {
+  const res = await ZipCodeClient.get(`/${zipcode}/json/`);
+
+  const CEP: ZipcodeProps = {
+    logradouro: res.data.logradouro,
+    CEP: res.data.cep,
+    uf: res.data.uf,
+    complemento: res.data.complemento,
+    bairro: res.data.bairro,
+    localidade: res.data.localidade,
+  };
+
+  return CEP;
 }
 
 export function logout() {

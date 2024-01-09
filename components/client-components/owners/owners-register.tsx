@@ -67,7 +67,7 @@ export default function OwnersRegister() {
   }
 
   return (
-    <form className="flex max-w-7xl mt-4" onSubmit={handleSubmit(handleForm)}>
+    <form className="max-w-7xl w-fit mt-4" onSubmit={handleSubmit(handleForm)}>
       <div className="flex flex-wrap">
         <div className="mr-4">
           <Label htmlFor="name">Nome</Label>
@@ -112,7 +112,7 @@ export default function OwnersRegister() {
           <Input id="ierg" {...register("ierg")} />
           <p className="text-red-500 text-sm">{errors.ierg?.message}</p>
         </div>
-        <div className="mr-4">
+        <div>
           <Label htmlFor="phone">Telefone</Label>
           <Input id="phone" {...register("phone")} />
           <p className="text-red-500 text-sm">{errors.phone?.message}</p>

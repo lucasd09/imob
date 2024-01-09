@@ -4,11 +4,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../data-table";
 import { useUserStore } from "@/stores/user-store";
 import { useEffect, useState } from "react";
+import { DataTableColumnHeader } from "../column-header";
 
 const columns: ColumnDef<OwnerProps>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
   },
   {
     accessorKey: "name",

@@ -67,7 +67,7 @@ export default function RentersRegister() {
   }
 
   return (
-    <form className="flex max-w-7xl mt-4" onSubmit={handleSubmit(handleForm)}>
+    <form className="max-w-7xl w-fit mt-4" onSubmit={handleSubmit(handleForm)}>
       <div className="flex flex-wrap">
         <div className="mr-4">
           <Label htmlFor="name">Nome</Label>
