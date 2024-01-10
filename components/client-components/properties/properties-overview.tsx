@@ -5,6 +5,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { DataTable } from "../data-table";
 import { DataTableColumnHeader } from "../column-header";
+import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
+import PropertiesEdit from "./properties-edit";
 
 const columns: ColumnDef<PropertiesProps>[] = [
   {
@@ -36,6 +38,31 @@ const columns: ColumnDef<PropertiesProps>[] = [
   {
     accessorKey: "avaliable",
     header: "Disponível",
+    cell: ({ row }) => {
+      const avaliable = row.getValue("avaliable");
+
+      if (avaliable) {
+        return (
+          <div>
+            <CheckIcon />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <Cross2Icon />
+          </div>
+        );
+      }
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const property = row.original;
+
+      return <PropertiesEdit property={property} />;
+    },
   },
 ];
 

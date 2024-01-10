@@ -28,6 +28,15 @@ const columns: ColumnDef<RenterProps>[] = [
   {
     accessorKey: "pessoa",
     header: "Pessoa",
+    cell: ({ row }) => {
+      const pessoa = row.getValue("pessoa");
+
+      if (pessoa === "FISICA") {
+        return <div>Física</div>;
+      } else {
+        return <div>Jurídica</div>;
+      }
+    },
   },
 ];
 
