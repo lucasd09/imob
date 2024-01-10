@@ -47,6 +47,13 @@ export default function PropertiesEdit({
   } = useForm<form>({
     resolver: zodResolver(schema),
     defaultValues: {
+      number: property.number,
+      address: property.address,
+      complement: property.complement,
+      district: property.district,
+      zipcode: property.zipcode,
+      uf: property.uf,
+      city: property.city,
       avaliable: property.avaliable,
     },
   });
@@ -84,72 +91,47 @@ export default function PropertiesEdit({
           <Pencil2Icon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="flex flex-col max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Editar imóvel</DialogTitle>
+        </DialogHeader>
         <form onSubmit={handleSubmit(handleForm)}>
-          <DialogHeader>
-            <DialogTitle>Editar imóvel</DialogTitle>
-          </DialogHeader>
           <div className="flex flex-wrap space-y-2">
             <div className="mr-4">
               <Label htmlFor="name">CEP</Label>
-              <Input
-                id="name"
-                {...register("zipcode")}
-                defaultValue={property.zipcode}
-              />
+              <Input id="name" {...register("zipcode")} />
               <p className="text-red-500 text-sm">{errors.zipcode?.message}</p>
             </div>
             <div className="mr-4">
               <Label htmlFor="address">Endereço</Label>
-              <Input
-                id="address"
-                {...register("address")}
-                defaultValue={property.address}
-              />
+              <Input id="address" {...register("address")} />
               <p className="text-red-500 text-sm">{errors.address?.message}</p>
             </div>
             <div className="mr-4">
               <Label htmlFor="number">Número</Label>
-              <Input
-                id="number"
-                className="w-20"
-                {...register("number")}
-                defaultValue={property.number}
-              />
+              <Input id="number" className="w-20" {...register("number")} />
               <p className="text-red-500 text-sm">{errors.number?.message}</p>
             </div>
             <div className="mr-4">
               <Label htmlFor="complement">Complemento</Label>
-              <Input
-                id="complement"
-                {...register("complement")}
-                defaultValue={property.complement}
-              />
+              <Input id="complement" {...register("complement")} />
               <p className="text-red-500 text-sm">
                 {errors.complement?.message}
               </p>
             </div>
             <div className="mr-4">
               <Label htmlFor="district">Bairro</Label>
-              <Input
-                id="district"
-                {...register("district")}
-                defaultValue={property.district}
-              />
+              <Input id="district" {...register("district")} />
               <p className="text-red-500 text-sm">{errors.district?.message}</p>
             </div>
             <div className="mr-4">
               <Label htmlFor="city">Cidade</Label>
-              <Input
-                id="city"
-                {...register("city")}
-                defaultValue={property.city}
-              />
+              <Input id="city" {...register("city")} />
               <p className="text-red-500 text-sm">{errors.city?.message}</p>
             </div>
             <div>
               <Label htmlFor="uf">Estado</Label>
-              <Input id="uf" {...register("uf")} defaultValue={property.uf} />
+              <Input id="uf" {...register("uf")} />
               <p className="text-red-500 text-sm">{errors.uf?.message}</p>
             </div>
           </div>

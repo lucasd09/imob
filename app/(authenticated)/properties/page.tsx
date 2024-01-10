@@ -1,3 +1,4 @@
+import Ownership from "@/components/client-components/properties/ownership";
 import PropertiesOverview from "@/components/client-components/properties/properties-overview";
 import PropertiesRegister from "@/components/client-components/properties/properties-register";
 import { Button } from "@/components/ui/button";
@@ -16,12 +17,16 @@ export default function Properties() {
         </div>
       </div>
       <Tabs defaultValue="overview">
-        <TabsList className="grid w-fit grid-cols-2">
+        <TabsList className="flex w-fit">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="ownership">Proprietários</TabsTrigger>
           <TabsTrigger value="register">Cadastro</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <PropertiesOverview />
+        </TabsContent>
+        <TabsContent value="ownership">
+          <Ownership />
         </TabsContent>
         <TabsContent value="register">
           <PropertiesRegister />
