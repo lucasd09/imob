@@ -186,6 +186,31 @@ export async function getZipcode(zipcode: string) {
   return CEP;
 }
 
+export async function getOwnerships(
+  userId: number,
+  propertyId: number
+): Promise<OwnershipProps[] | undefined> {
+  try {
+    const res = await axiosClient.get(
+      `/properties/ownerships/${userId}/${propertyId}`
+    );
+
+    if (res.status === 200) {
+      const ownerships: OwnershipProps[] = res.data.map(
+        (item: OwnershipDto) => {
+          return {
+            ownerId: item.owner.id,
+            name: item.owner.name,
+            cut: item.cut,
+            isMainOwner: item.isMainOwner,
+          };
+        }
+      );
+      return ownerships;
+    }
+  } catch (error) {}
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }

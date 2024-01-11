@@ -8,6 +8,7 @@ import { useUserStore } from "@/stores/user-store";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { createProperty, getZipcode } from "@/services/axios-requests";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 const schema = z.object({
   address: z.string().min(5, "Endereço inválido"),
@@ -72,15 +73,15 @@ export default function PropertiesRegister() {
   }
 
   return (
-    <form className="max-w-7xl w-fit mt-4" onSubmit={handleSubmit(handleForm)}>
+    <form className="max-w-7xl w-fit mt-6" onSubmit={handleSubmit(handleForm)}>
       <div className="flex mb-6 items-end">
-        <div className="mr-4">
+        <div className="mr-1">
           <Label htmlFor="name">CEP</Label>
           <Input id="name" {...register("zipcode")} />
           <p className="text-red-500 text-sm">{errors.zipcode?.message}</p>
         </div>
         <Button type="button" onClick={() => fetchZipcode()}>
-          Buscar
+          <MagnifyingGlassIcon />
         </Button>
       </div>
       <div className="flex flex-wrap">

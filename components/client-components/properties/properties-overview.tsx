@@ -42,17 +42,9 @@ const columns: ColumnDef<PropertiesProps>[] = [
       const avaliable = row.getValue("avaliable");
 
       if (avaliable) {
-        return (
-          <div>
-            <CheckIcon />
-          </div>
-        );
+        return <CheckIcon />;
       } else {
-        return (
-          <div>
-            <Cross2Icon />
-          </div>
-        );
+        return <Cross2Icon />;
       }
     },
   },
