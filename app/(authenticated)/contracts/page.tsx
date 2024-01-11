@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import ContractsOverview from "@/components/client-components/contracts/contracts-overview";
+import ContractsRegister from "@/components/client-components/contracts/contracts-register";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -8,18 +8,18 @@ export default function Contracts() {
     <div className="px-8 py-6">
       <div className="flex justify-between mb-4">
         <Label className="text-3xl font-semibold">Contratos</Label>
-        <div className="flex space-x-2">
-          <Input />
-          <Button>Exportar</Button>
-        </div>
       </div>
-      <Tabs defaultValue="account" className="w-fit">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">tab 1</TabsTrigger>
-          <TabsTrigger value="password">tab 2</TabsTrigger>
+      <Tabs defaultValue="overview">
+        <TabsList className="grid w-fit grid-cols-2">
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="register">Cadastro</TabsTrigger>
         </TabsList>
-        <TabsContent value="account"></TabsContent>
-        <TabsContent value="password"></TabsContent>
+        <TabsContent value="overview">
+          <ContractsOverview />
+        </TabsContent>
+        <TabsContent value="register">
+          <ContractsRegister />
+        </TabsContent>
       </Tabs>
     </div>
   );

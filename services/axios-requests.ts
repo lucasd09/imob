@@ -211,6 +211,25 @@ export async function getOwnerships(
   } catch (error) {}
 }
 
+export async function getContracts(userId: number) {
+  const res = await axiosClient.get(`/contracts/${userId}`);
+
+  if (res.status === 200) {
+    const contracts: ContractProps[] = res.data.map((item: ContractProps) => {
+      return {
+        id: item.id,
+        property: item.property.address + ", " + item.property.number,
+        renter: item.renter.name,
+        status: item.status,
+        startDate: item.startDate,
+        endDate: item.endDate,
+      };
+    });
+
+    return contracts;
+  }
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }
