@@ -16,6 +16,7 @@ import {
   Cross2Icon,
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
+import AddOwnership from "./add-ownership";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
@@ -95,6 +96,7 @@ export default function Ownership() {
               />
             </div>
             <Button
+              className="mr-1"
               onClick={async () => {
                 setData(await fetchOwnerships());
               }}
