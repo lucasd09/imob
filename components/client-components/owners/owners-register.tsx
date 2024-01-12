@@ -119,7 +119,15 @@ export default function OwnersRegister() {
         </div>
       </div>
       <div className="flex justify-end">
-        <Button className="mt-6">Salvar</Button>
+        <Button
+          type="reset"
+          variant={"outline"}
+          className="mr-4"
+          onClick={() => reset()}
+        >
+          Limpar
+        </Button>
+        <Button>Salvar</Button>
       </div>
     </form>
   );

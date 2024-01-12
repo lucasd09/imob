@@ -11,10 +11,6 @@ type AuthContextType = {
   signIn: (data: SignInProps) => Promise<string>;
 };
 
-type User = {
-  token: string;
-};
-
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: ChildrenProps) {

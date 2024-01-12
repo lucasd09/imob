@@ -1,6 +1,7 @@
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { ZipCodeClient, axiosClient } from "./axios-client";
 import axios from "axios";
+import { format } from "date-fns";
 
 const { "imob-token": token } = parseCookies();
 
@@ -137,6 +138,16 @@ export async function getProperties(userId: number) {
   }
 }
 
+export async function getProperty(userId: number, propertyId: number) {
+  const res = await axiosClient.get(`/properties/${userId}/${propertyId}`);
+
+  if (res.status === 200) {
+    const property: PropertiesProps = res.data;
+
+    return property;
+  }
+}
+
 export async function createProperty(data: PropertiesProps, userId: number) {
   const res: PropertiesProps = await axiosClient.post("/properties", {
     address: data.address,
@@ -228,6 +239,64 @@ export async function getContracts(userId: number) {
 
     return contracts;
   }
+}
+
+export async function getContract(userId: number, contractId: number) {
+  const res = await axiosClient.get(`/contracts/${userId}/${contractId}`);
+
+  if (res.status === 200) {
+    const renter: RenterProps = {
+      name: res.data.renter.name,
+      email: res.data.renter.email,
+      phone: res.data.renter.phone,
+      birthdate: "",
+      cnpjcpf: "",
+      ierg: "",
+      pessoa: "FISICA",
+    };
+    const property: PropertiesProps = {
+      address: res.data.property.address,
+      number: res.data.property.number,
+      complement: res.data.property.complement,
+      district: res.data.property.district,
+      city: res.data.property.city,
+      uf: res.data.property.uf,
+      avaliable: false,
+      zipcode: "",
+      Ownership: res.data.property.ownership.map((item: OwnershipDto) => {
+        return {
+          ownerId: item.owner.id,
+          name: item.owner.name,
+          cut: item.cut,
+          isMainOwner: item.isMainOwner,
+        };
+      }),
+    };
+
+    const contract: ContractDetail = {
+      value: res.data.value,
+      status: res.data.status,
+      startDate: res.data.startDate,
+      endDate: res.data.endDate,
+      renter,
+      property,
+    };
+    return contract;
+  }
+}
+
+export async function createContract(data: ContractDto, userId: number) {
+  const res = await axiosClient.post("/contracts", {
+    value: data.value,
+    status: data.status,
+    startDate: new Date(data.startDate),
+    endDate: new Date(data.endDate),
+    user: { connect: { id: userId } },
+    property: { connect: { id: data.propertyId } },
+    renter: { connect: { id: data.renterId } },
+  });
+
+  return res.data;
 }
 
 export function logout() {

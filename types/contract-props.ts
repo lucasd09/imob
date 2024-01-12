@@ -7,4 +7,20 @@ type ContractProps = {
   endDate: string | Date;
 };
 
-type ContractDto = {};
+type ContractDto = {
+  value: number;
+  status: "EDITING" | "ACTIVE" | "CLOSED";
+  startDate: string | Date;
+  endDate: string | Date;
+  renterId: number;
+  propertyId: number;
+};
+
+type ContractDetail = {
+  value: number;
+  status: "EDITING" | "ACTIVE" | "CLOSED";
+  startDate: string | Date;
+  endDate: string | Date;
+  property: PropertiesProps;
+  renter: RenterProps;
+};

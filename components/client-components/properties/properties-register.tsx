@@ -76,8 +76,8 @@ export default function PropertiesRegister() {
     <form className="max-w-7xl w-fit mt-6" onSubmit={handleSubmit(handleForm)}>
       <div className="flex mb-6 items-end">
         <div className="mr-1">
-          <Label htmlFor="name">CEP</Label>
-          <Input id="name" {...register("zipcode")} />
+          <Label htmlFor="zipcode">CEP</Label>
+          <Input id="zipcode" {...register("zipcode")} />
           <p className="text-red-500 text-sm">{errors.zipcode?.message}</p>
         </div>
         <Button type="button" onClick={() => fetchZipcode()}>
@@ -117,6 +117,14 @@ export default function PropertiesRegister() {
         </div>
       </div>
       <div className="flex justify-end mt-6">
+        <Button
+          type="reset"
+          variant={"outline"}
+          className="mr-4"
+          onClick={() => reset()}
+        >
+          Limpar
+        </Button>
         <Button>Salvar</Button>
       </div>
     </form>

@@ -9,4 +9,5 @@ type PropertiesProps = {
   district: string;
   city: string;
   userId?: number;
+  Ownership?: OwnershipProps[];
 };

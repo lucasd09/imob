@@ -16,7 +16,6 @@ import {
   Cross2Icon,
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
-import AddOwnership from "./add-ownership";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
