@@ -32,6 +32,14 @@ const schema = z.object({
       message: "Data de Término inválida.",
     }
   ),
+  dueDate: z.string().refine(
+    (value) => {
+      return !isNaN(Date.parse(value));
+    },
+    {
+      message: "Data de Cobrança inválida.",
+    }
+  ),
   propertyId: z.coerce.number().gte(1, "Código Inválido"),
   address: z.string(),
   number: z.coerce.number(),
@@ -58,9 +66,10 @@ export default function ContractsRegister() {
     const contract = await createContract(
       {
         value: data.value,
-        startDate: data.startDate,
         status: "EDITING",
+        startDate: data.startDate,
         endDate: data.endDate,
+        dueDate: data.dueDate,
         renterId: data.renterId,
         propertyId: data.propertyId,
       },
@@ -171,6 +180,11 @@ export default function ContractsRegister() {
           <Label htmlFor="endDate">Data de Término</Label>
           <Input id="endDate" {...register("endDate")} type="date" />
           <p className="text-red-500 text-sm">{errors.endDate?.message}</p>
+        </div>
+        <div>
+          <Label htmlFor="dueDate">Início da Cobrança</Label>
+          <Input id="dueDate" {...register("dueDate")} type="date" />
+          <p className="text-red-500 text-sm">{errors.dueDate?.message}</p>
         </div>
       </div>
       <div className="flex justify-end mt-6">

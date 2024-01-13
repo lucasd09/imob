@@ -278,6 +278,7 @@ export async function getContract(userId: number, contractId: number) {
       status: res.data.status,
       startDate: res.data.startDate,
       endDate: res.data.endDate,
+      dueDate: res.data.dueDate,
       renter,
       property,
     };
@@ -291,6 +292,7 @@ export async function createContract(data: ContractDto, userId: number) {
     status: data.status,
     startDate: new Date(data.startDate),
     endDate: new Date(data.endDate),
+    dueDate: new Date(data.dueDate),
     user: { connect: { id: userId } },
     property: { connect: { id: data.propertyId } },
     renter: { connect: { id: data.renterId } },

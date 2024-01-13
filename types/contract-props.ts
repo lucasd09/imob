@@ -12,6 +12,7 @@ type ContractDto = {
   status: "EDITING" | "ACTIVE" | "CLOSED";
   startDate: string | Date;
   endDate: string | Date;
+  dueDate: string | Date;
   renterId: number;
   propertyId: number;
 };
@@ -21,6 +22,7 @@ type ContractDetail = {
   status: "EDITING" | "ACTIVE" | "CLOSED";
   startDate: string | Date;
   endDate: string | Date;
+  dueDate: string | Date;
   property: PropertiesProps;
   renter: RenterProps;
 };
