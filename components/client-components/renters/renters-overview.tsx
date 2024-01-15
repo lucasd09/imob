@@ -5,6 +5,7 @@ import { DataTable } from "../data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { DataTableColumnHeader } from "../column-header";
+import RentersEdit from "./renters-edit";
 
 const columns: ColumnDef<RenterProps>[] = [
   {
@@ -36,6 +37,14 @@ const columns: ColumnDef<RenterProps>[] = [
       } else {
         return <div>Jurídica</div>;
       }
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const renter = row.original;
+
+      return <RentersEdit renter={renter} />;
     },
   },
 ];

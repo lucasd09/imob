@@ -1,6 +1,5 @@
 "use client";
 import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,6 +8,14 @@ import { useUserStore } from "@/stores/user-store";
 import { createOwner } from "@/services/axios-requests";
 import { useToast } from "@/components/ui/use-toast";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const schema = z.object({
   name: z.string().min(5, "Insira um nome"),
@@ -35,15 +42,10 @@ export default function OwnersRegister() {
   const user = useUserStore();
   const { toast } = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<form>({ resolver: zodResolver(schema) });
+  const form = useForm<form>({ resolver: zodResolver(schema) });
 
   async function handleForm(data: form) {
-    const renter = await createOwner(
+    const owner = await createOwner(
       {
         name: data.name,
         email: data.email,
@@ -56,79 +58,137 @@ export default function OwnersRegister() {
       user.id
     );
 
-    if (renter) {
-      reset();
+    if (owner) {
+      form.reset();
 
       return toast({
         title: "Sucesso",
-        description: "Locador criado com êxito.",
+        description: "Locatário criado com êxito.",
       });
     }
   }
 
   return (
-    <form className="max-w-7xl w-fit mt-4" onSubmit={handleSubmit(handleForm)}>
-      <div className="flex flex-wrap">
-        <div className="mr-4">
-          <Label htmlFor="name">Nome</Label>
-          <Input id="name" {...register("name")} />
-          <p className="text-red-500 text-sm">{errors.name?.message}</p>
+    <Form {...form}>
+      <form className="max-w-5xl mt-4" onSubmit={form.handleSubmit(handleForm)}>
+        <div className="flex flex-wrap">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-2">
+                <FormLabel>Nome</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-2">
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="mr-2">
+                <FormLabel>Telefone</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="birthdate"
+            render={({ field }) => (
+              <FormItem className="mr-2">
+                <FormLabel>Data de nascimento</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="cnpjcpf"
+            render={({ field }) => (
+              <FormItem className="mr-2">
+                <FormLabel>CNPJ/CPF</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="ierg"
+            render={({ field }) => (
+              <FormItem className="mr-2">
+                <FormLabel>IE/RG</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="pessoa"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-2">
+                <FormLabel>Pessoa</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} className="flex">
+                    <FormItem className="flex items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="FISICA" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Física</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="JURIDICA" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Jurídica</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-        <div className="mr-4">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" {...register("email")} />
-          <p className="text-red-500 text-sm">{errors.email?.message}</p>
-        </div>
-        <div className="mr-4">
-          <Label htmlFor="birthdate">Data de Nascimento</Label>
-          <Input id="birthdate" {...register("birthdate")} type="date" />
-          <p className="text-red-500 text-sm">{errors.birthdate?.message}</p>
-        </div>
-        <div className="mr-4 flex flex-col justify-evenly">
-          <Label htmlFor="pessoa">Pessoa</Label>
-          <RadioGroup
-            defaultValue="FISICA"
-            className="flex"
-            {...register("pessoa")}
+        <div className="flex mt-4 justify-end">
+          <Button
+            type="reset"
+            variant={"outline"}
+            className="mr-4"
+            onClick={() => form.reset()}
           >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="FISICA" id="FISICA" />
-              <Label htmlFor="FISICA">Física</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="JURIDICA" id="JURIDICA" />
-              <Label htmlFor="JURIDICA">Jurídica</Label>
-            </div>
-          </RadioGroup>
-          <p className="text-red-500 text-sm">{errors.pessoa?.message}</p>
+            Limpar
+          </Button>
+          <Button>Salvar</Button>
         </div>
-        <div className="mr-4">
-          <Label htmlFor="cnpjcpf">CNPJ/CPF</Label>
-          <Input id="cnpjcpf" {...register("cnpjcpf")} />
-          <p className="text-red-500 text-sm">{errors.cnpjcpf?.message}</p>
-        </div>
-        <div className="mr-4">
-          <Label htmlFor="ierg">IE/RG</Label>
-          <Input id="ierg" {...register("ierg")} />
-          <p className="text-red-500 text-sm">{errors.ierg?.message}</p>
-        </div>
-        <div>
-          <Label htmlFor="phone">Telefone</Label>
-          <Input id="phone" {...register("phone")} />
-          <p className="text-red-500 text-sm">{errors.phone?.message}</p>
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <Button
-          type="reset"
-          variant={"outline"}
-          className="mr-4"
-          onClick={() => reset()}
-        >
-          Limpar
-        </Button>
-        <Button>Salvar</Button>
-      </div>
-    </form>
+      </form>
+    </Form>
   );
 }

@@ -5,6 +5,7 @@ import { DataTable } from "../data-table";
 import { useUserStore } from "@/stores/user-store";
 import { useEffect, useState } from "react";
 import { DataTableColumnHeader } from "../column-header";
+import OwnersEdit from "./owners-edit";
 
 const columns: ColumnDef<OwnerProps>[] = [
   {
@@ -36,6 +37,14 @@ const columns: ColumnDef<OwnerProps>[] = [
       } else {
         return <div>Jurídica</div>;
       }
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const owner = row.original;
+
+      return <OwnersEdit owner={owner} />;
     },
   },
 ];

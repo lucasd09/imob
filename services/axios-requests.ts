@@ -82,6 +82,26 @@ export async function createRenter(data: RenterProps, userId: number) {
   }
 }
 
+export async function updateRenter(data: RenterProps, userId: number) {
+  try {
+    const res = await axiosClient.patch(`/renters/${userId}/${data.id}`, {
+      name: data.name,
+      email: data.email,
+      cnpjcpf: data.cnpjcpf,
+      ierg: data.ierg,
+      birthdate: new Date(data.birthdate),
+      pessoa: data.pessoa,
+      phone: data.phone,
+    });
+
+    if (res.status === 200) {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
 export async function getOwners(
   userId: number
 ): Promise<OwnerProps[] | undefined> {
@@ -121,6 +141,26 @@ export async function createOwner(data: OwnerProps, userId: number) {
 
   if (res.status === 201) {
     return res.data;
+  }
+}
+
+export async function updateOwner(data: OwnerProps, userId: number) {
+  try {
+    const res = await axiosClient.patch(`/owners/${userId}/${data.id}`, {
+      name: data.name,
+      email: data.email,
+      cnpjcpf: data.cnpjcpf,
+      ierg: data.ierg,
+      birthdate: new Date(data.birthdate),
+      pessoa: data.pessoa,
+      phone: data.phone,
+    });
+
+    if (res.status === 200) {
+      return true;
+    }
+  } catch (error) {
+    return false;
   }
 }
 

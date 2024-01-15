@@ -2,7 +2,7 @@ type RenterProps = {
   id?: number;
   name: string;
   email: string;
-  birthdate: string | Date;
+  birthdate: string;
   cnpjcpf: string;
   ierg: string;
   phone: string;
