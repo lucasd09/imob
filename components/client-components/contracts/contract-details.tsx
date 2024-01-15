@@ -17,6 +17,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import useSWR from "swr/immutable";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
@@ -98,14 +107,9 @@ export default function ContractDetails({
   const { toast } = useToast();
   const [data, setData] = useState<ContractDetail | undefined>();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm<form>({ resolver: zodResolver(schema) });
+  const form = useForm<form>({ resolver: zodResolver(schema) });
+  const fetcher = (url) =>
+    getContract(user.id, params.id).then(({ data }) => data);
 
   useEffect(() => {
     async function fetchContract() {
@@ -117,18 +121,6 @@ export default function ContractDetails({
     fetchContract();
   }, [params.id, user.id]);
 
-  function setProperty() {
-    setValue("address", data?.property.address || "");
-    setValue("number", data?.property.number || 0);
-    setValue("complement", data?.property.complement || "");
-    setValue("district", data?.property.district || "");
-    setValue("city", data?.property.city || "");
-    setValue("uf", data?.property.uf || "");
-  }
-  function setRenter() {
-    setValue("renterName", data?.renter.name || "");
-  }
-
   async function handleForm(data: form) {
     return toast({
       title: "Sucesso",
@@ -137,117 +129,237 @@ export default function ContractDetails({
   }
 
   return (
-    <form className="max-w-7xl w-fit mt-6" onSubmit={handleSubmit(handleForm)}>
-      <Label className="text-lg">Dados básicos</Label>
-      <div className="flex my-4">
-        <div className="mr-4">
-          <Label htmlFor="value">Valor</Label>
-          <Input id="value" className="text-right" {...register("value")} />
-          <p className="text-red-500 text-sm">{errors.value?.message}</p>
+    <Form {...form}>
+      <form
+        className="max-w-7xl w-fit mt-6"
+        onSubmit={form.handleSubmit(handleForm)}
+      >
+        <Label className="text-lg">Dados básicos</Label>
+        <div className="flex my-4">
+          <FormField
+            control={form.control}
+            name="value"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Valor</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Data de início</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Data de Término</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dueDate"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Início da Cobrança</FormLabel>
+                <FormControl>
+                  <Input {...field} type="date" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <Button>Salvar</Button> */}
         </div>
-        <div className="mr-4">
-          <Label htmlFor="startDate">Data de início</Label>
-          <Input id="startDate" type="date" {...register("startDate")} />
-          <p className="text-red-500 text-sm">{errors.startDate?.message}</p>
-        </div>
-        <div className="mr-4">
-          <Label htmlFor="endDate">Data de término</Label>
-          <Input id="endDate" type="date" {...register("endDate")} />
-          <p className="text-red-500 text-sm">{errors.endDate?.message}</p>
-        </div>
-        <div className="mr-4">
-          <Label htmlFor="dueDate">Data de cobrança</Label>
-          <Input id="dueDate" type="date" {...register("dueDate")} />
-          <p className="text-red-500 text-sm">{errors.dueDate?.message}</p>
-        </div>
-        {/* <Button>Salvar</Button> */}
-      </div>
-      <Label className="text-lg">Dados do Imóvel</Label>
-      <div className="flex my-4">
-        <div>
-          <div className="flex mr-4 items-end">
-            <div className="mr-1">
-              <Label htmlFor="propertyId">ID do Imóvel</Label>
-              <Input
-                id="propertyId"
-                className="w-28"
-                {...register("propertyId")}
+        <Label className="text-lg">Dados do Imóvel</Label>
+        <div className="flex my-4">
+          <div>
+            <div className="flex mr-4 items-end">
+              <FormField
+                control={form.control}
+                name="propertyId"
+                render={({ field }) => (
+                  <FormItem className="w-fit mr-1">
+                    <FormLabel>ID do Imóvel</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <Button type="button">
+                <MagnifyingGlassIcon />
+              </Button>
             </div>
-            <Button type="button">
-              <MagnifyingGlassIcon />
-            </Button>
           </div>
-          <p className="text-red-500 text-sm">{errors.propertyId?.message}</p>
-        </div>
-
-        <div className="flex">
-          <div className="mr-1">
-            <Label htmlFor="address">Endereço</Label>
-            <Input id="address" {...register("address")} readOnly />
-          </div>
-          <div className="mr-4">
-            <Label htmlFor="number">Número</Label>
-            <Input
-              id="number"
-              className="w-20"
-              {...register("number")}
-              readOnly
+          <div className="flex">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem className="w-fit mr-1">
+                  <FormLabel>Endereço</FormLabel>
+                  <FormControl>
+                    <Input {...field} readOnly />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="number"
+              render={({ field }) => (
+                <FormItem className="w-20 mr-4">
+                  <FormLabel>Número</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
-          <div className="mr-4">
-            <Label htmlFor="complement">Complemento</Label>
-            <Input id="complement" {...register("complement")} readOnly />
-          </div>
-          <div className="mr-4">
-            <Label htmlFor="district">Bairro</Label>
-            <Input id="district" {...register("district")} readOnly />
-          </div>
-          <div className="mr-4">
-            <Label htmlFor="city">Cidade</Label>
-            <Input id="city" {...register("city")} readOnly />
-          </div>
-          <div className="mr-4">
-            <Label htmlFor="uf">UF</Label>
-            <Input id="uf" {...register("uf")} readOnly />
-          </div>
+          <FormField
+            control={form.control}
+            name="complement"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Complemento</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="district"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Bairro</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Cidade</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="uf"
+            render={({ field }) => (
+              <FormItem className="w-fit mr-4">
+                <FormLabel>Estado</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-      </div>
-      <Label className="text-lg">Dados do Locatário</Label>
-      <div className="flex my-4">
-        <div>
-          <div className="flex mr-4 items-end">
-            <div className="mr-1">
-              <Label htmlFor="propertyId">ID do Locatário</Label>
-              <Input
-                id="propertyId"
-                className="w-28"
-                {...register("renterId")}
+        <Label className="text-lg">Dados do Locatário</Label>
+        <div className="flex my-4">
+          <div>
+            <div className="flex mr-4 items-end">
+              <FormField
+                control={form.control}
+                name="renterId"
+                render={({ field }) => (
+                  <FormItem className="w-fit mr-1">
+                    <FormLabel>ID do Locatário</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <Button type="button">
+                <MagnifyingGlassIcon />
+              </Button>
             </div>
-            <Button type="button">
-              <MagnifyingGlassIcon />
-            </Button>
           </div>
-          <p className="text-red-500 text-sm">{errors.renterId?.message}</p>
+          <div className="flex">
+            <FormField
+              control={form.control}
+              name="renterName"
+              render={({ field }) => (
+                <FormItem className="w-fit mr-4">
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="renterEmail"
+              render={({ field }) => (
+                <FormItem className="w-fit mr-4">
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="renterPhone"
+              render={({ field }) => (
+                <FormItem className="w-fit mr-4">
+                  <FormLabel>Complemento</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
-        <div className="flex">
-          <div className="mr-4">
-            <Label htmlFor="renterName">Nome</Label>
-            <Input id="renterName" {...register("renterName")} readOnly />
-          </div>
-          <div className="mr-4">
-            <Label htmlFor="renterEmail">Email</Label>
-            <Input id="renterEmail" {...register("renterEmail")} readOnly />
-          </div>
-          <div className="mr-4">
-            <Label htmlFor="renterPhone">Telefone</Label>
-            <Input id="renterPhone" {...register("renterPhone")} readOnly />
-          </div>
-        </div>
-      </div>
-      <Label className="text-lg">Dados dos Locadores</Label>
-      <DataTable columns={columns} data={data?.property.Ownership || []} />
-    </form>
+        <Label className="text-lg">Dados dos Locadores</Label>
+        <DataTable columns={columns} data={data?.property.Ownership || []} />
+      </form>
+    </Form>
   );
 }
