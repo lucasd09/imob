@@ -1,12 +1,11 @@
 "use client";
-import { getProperties } from "@/services/axios-requests";
 import { useUserStore } from "@/stores/user-store";
 import { ColumnDef } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
 import { DataTable } from "../data-table";
 import { DataTableColumnHeader } from "../column-header";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import PropertiesEdit from "./properties-edit";
+import { useFetch } from "@/hooks/useSWR";
 
 const columns: ColumnDef<PropertiesProps>[] = [
   {
@@ -60,19 +59,7 @@ const columns: ColumnDef<PropertiesProps>[] = [
 
 export default function PropertiesOverview() {
   const user = useUserStore();
-  const [data, setData] = useState<PropertiesProps[] | undefined>([]);
-
-  useEffect(() => {
-    async function fetchProperties() {
-      try {
-        const properties = await getProperties(user.id);
-        setData(properties);
-      } catch (error) {
-        console.error("Erro ao buscar dados de Imóveis:", error);
-      }
-    }
-    fetchProperties();
-  }, [user.id]);
+  const { data } = useFetch<PropertiesProps[]>(`/properties/${user.id}`);
 
   return (
     <div>

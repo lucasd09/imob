@@ -20,9 +20,9 @@ type ContractDto = {
 type ContractDetail = {
   value: number;
   status: "EDITING" | "ACTIVE" | "CLOSED";
-  startDate: string | Date;
-  endDate: string | Date;
-  dueDate: string | Date;
+  startDate: string;
+  endDate: string;
+  dueDate: string;
   property: PropertiesProps;
   renter: RenterProps;
 };

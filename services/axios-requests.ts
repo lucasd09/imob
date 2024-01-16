@@ -250,8 +250,8 @@ export async function getOwnerships(
       const ownerships: OwnershipProps[] = res.data.map(
         (item: OwnershipDto) => {
           return {
-            ownerId: item.owner.id,
-            name: item.owner.name,
+            ownerId: item.owner?.id,
+            name: item.owner?.name,
             cut: item.cut,
             isMainOwner: item.isMainOwner,
           };
@@ -281,50 +281,50 @@ export async function getContracts(userId: number) {
   }
 }
 
-export async function getContract(userId: number, contractId: number) {
-  const res = await axiosClient.get(`/contracts/${userId}/${contractId}`);
+// export async function getContract(userId: number, contractId: number) {
+//   const res = await axiosClient.get(`/contracts/${userId}/${contractId}`);
 
-  if (res.status === 200) {
-    const renter: RenterProps = {
-      name: res.data.renter.name,
-      email: res.data.renter.email,
-      phone: res.data.renter.phone,
-      birthdate: "",
-      cnpjcpf: "",
-      ierg: "",
-      pessoa: "FISICA",
-    };
-    const property: PropertiesProps = {
-      address: res.data.property.address,
-      number: res.data.property.number,
-      complement: res.data.property.complement,
-      district: res.data.property.district,
-      city: res.data.property.city,
-      uf: res.data.property.uf,
-      avaliable: false,
-      zipcode: "",
-      Ownership: res.data.property.ownership.map((item: OwnershipDto) => {
-        return {
-          ownerId: item.owner.id,
-          name: item.owner.name,
-          cut: item.cut,
-          isMainOwner: item.isMainOwner,
-        };
-      }),
-    };
+//   if (res.status === 200) {
+//     const renter: RenterProps = {
+//       name: res.data.renter.name,
+//       email: res.data.renter.email,
+//       phone: res.data.renter.phone,
+//       birthdate: "",
+//       cnpjcpf: "",
+//       ierg: "",
+//       pessoa: "FISICA",
+//     };
+//     const property: PropertiesProps = {
+//       address: res.data.property.address,
+//       number: res.data.property.number,
+//       complement: res.data.property.complement,
+//       district: res.data.property.district,
+//       city: res.data.property.city,
+//       uf: res.data.property.uf,
+//       avaliable: false,
+//       zipcode: "",
+//       Ownership: res.data.property.ownership.map((item: OwnershipDto) => {
+//         return {
+//           ownerId: item.owner.id,
+//           name: item.owner.name,
+//           cut: item.cut,
+//           isMainOwner: item.isMainOwner,
+//         };
+//       }),
+//     };
 
-    const contract: ContractDetail = {
-      value: res.data.value,
-      status: res.data.status,
-      startDate: res.data.startDate,
-      endDate: res.data.endDate,
-      dueDate: res.data.dueDate,
-      renter,
-      property,
-    };
-    return contract;
-  }
-}
+//     const contract: ContractDetail = {
+//       value: res.data.value,
+//       status: res.data.status,
+//       startDate: res.data.startDate,
+//       endDate: res.data.endDate,
+//       dueDate: res.data.dueDate,
+//       renter,
+//       property,
+//     };
+//     return contract;
+//   }
+// }
 
 export async function createContract(data: ContractDto, userId: number) {
   const res = await axiosClient.post("/contracts", {

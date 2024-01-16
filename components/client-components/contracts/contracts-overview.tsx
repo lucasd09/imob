@@ -5,10 +5,9 @@ import Link from "next/link";
 import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../data-table";
-import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/user-store";
-import { getContracts } from "@/services/axios-requests";
 import { format } from "date-fns";
+import { useFetch } from "@/hooks/useSWR";
 
 const columns: ColumnDef<ContractProps>[] = [
   {
@@ -20,10 +19,20 @@ const columns: ColumnDef<ContractProps>[] = [
   {
     accessorKey: "property",
     header: "imóvel",
+    cell: ({ row }) => {
+      const contract: PropertiesProps = row.getValue("property");
+
+      return contract.address + ", " + contract.number;
+    },
   },
   {
     accessorKey: "renter",
     header: "Locatário",
+    cell: ({ row }) => {
+      const renter: RenterProps = row.getValue("renter");
+
+      return renter.name;
+    },
   },
   {
     accessorKey: "status",
@@ -77,19 +86,7 @@ const columns: ColumnDef<ContractProps>[] = [
 
 export default function ContractsOverview() {
   const user = useUserStore();
-  const [data, setData] = useState<ContractProps[] | undefined>([]);
-
-  useEffect(() => {
-    async function fetchContracts() {
-      try {
-        const contracts = await getContracts(user.id);
-        setData(contracts);
-      } catch (error) {
-        console.error("Erro ao buscar dados de Contratos:", error);
-      }
-    }
-    fetchContracts();
-  }, [user.id]);
+  const { data } = useFetch<ContractProps[]>(`/contracts/${user.id}`);
 
   return (
     <div>

@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getContract } from "@/services/axios-requests";
 import { useUserStore } from "@/stores/user-store";
 import {
   CheckIcon,
@@ -12,7 +11,6 @@ import {
 import { DataTable } from "../data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../column-header";
-import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +23,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import useSWR from "swr/immutable";
+import { useFetch } from "@/hooks/useSWR";
+import { format } from "date-fns";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
@@ -105,23 +104,28 @@ export default function ContractDetails({
 }) {
   const user = useUserStore();
   const { toast } = useToast();
-  const [data, setData] = useState<ContractDetail | undefined>();
+  const { data } = useFetch<ContractDetail>(
+    `/contracts/${user.id}/${params.id}`
+  );
+  const form = useForm<form>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      value: data?.value,
+    },
+  });
 
-  const form = useForm<form>({ resolver: zodResolver(schema) });
-  const fetcher = (url) =>
-    getContract(user.id, params.id).then(({ data }) => data);
-
-  useEffect(() => {
-    async function fetchContract() {
-      try {
-        const contract = await getContract(user.id, params.id);
-        setData(contract);
-      } catch (error) {}
+  const ownership: OwnershipProps[] | undefined = data?.property.ownership?.map(
+    (item: OwnershipDto) => {
+      return {
+        ownerId: item.owner?.id,
+        name: item.owner?.name,
+        cut: item.cut,
+        isMainOwner: item.isMainOwner,
+      };
     }
-    fetchContract();
-  }, [params.id, user.id]);
+  );
 
-  async function handleForm(data: form) {
+  async function handleForm(s: form) {
     return toast({
       title: "Sucesso",
       description: "Contrato atualizado com êxito.",
@@ -143,7 +147,7 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Valor</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} className="text-right" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -188,7 +192,9 @@ export default function ContractDetails({
               </FormItem>
             )}
           />
-          {/* <Button>Salvar</Button> */}
+          <Button type="button" onClick={() => console.log(data)}>
+            Salvar
+          </Button>
         </div>
         <Label className="text-lg">Dados do Imóvel</Label>
         <div className="flex my-4">
@@ -358,7 +364,7 @@ export default function ContractDetails({
           </div>
         </div>
         <Label className="text-lg">Dados dos Locadores</Label>
-        <DataTable columns={columns} data={data?.property.Ownership || []} />
+        <DataTable columns={columns} data={ownership || []} />
       </form>
     </Form>
   );

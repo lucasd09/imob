@@ -1,11 +1,10 @@
 "use client";
-import { getOwners } from "@/services/axios-requests";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../data-table";
 import { useUserStore } from "@/stores/user-store";
-import { useEffect, useState } from "react";
 import { DataTableColumnHeader } from "../column-header";
 import OwnersEdit from "./owners-edit";
+import { useFetch } from "@/hooks/useSWR";
 
 const columns: ColumnDef<OwnerProps>[] = [
   {
@@ -51,19 +50,8 @@ const columns: ColumnDef<OwnerProps>[] = [
 
 export default function OwnersOverview() {
   const user = useUserStore();
-  const [data, setData] = useState<OwnerProps[] | undefined>([]);
+  const { data } = useFetch<OwnerProps[]>(`/owners/${user.id}`);
 
-  useEffect(() => {
-    async function fetchOwners() {
-      try {
-        const owners = await getOwners(user.id);
-        setData(owners);
-      } catch (error) {
-        console.error("Erro ao buscar dados de Locadores:", error);
-      }
-    }
-    fetchOwners();
-  }, [user.id]);
   return (
     <div>
       <DataTable columns={columns} data={data || []} />
