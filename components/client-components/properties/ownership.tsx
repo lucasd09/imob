@@ -16,6 +16,7 @@ import {
   Cross2Icon,
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
+import AddOwnership from "./add-ownership";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
@@ -102,10 +103,10 @@ export default function Ownership() {
             >
               <MagnifyingGlassIcon />
             </Button>
+            <AddOwnership />
           </div>
           <p className="text-red-500 text-sm">{errors.propertyId?.message}</p>
         </div>
-        <div className="flex flex-wrap"></div>
         <DataTable columns={columns} data={data || []} />
       </form>
     </div>
