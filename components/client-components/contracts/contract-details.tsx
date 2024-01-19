@@ -125,7 +125,7 @@ export default function ContractDetails({
     }
   );
 
-  async function handleForm(s: form) {
+  async function handleForm(formData: form) {
     return toast({
       title: "Sucesso",
       description: "Contrato atualizado com êxito.",

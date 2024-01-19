@@ -3,9 +3,15 @@ import { useUserStore } from "@/stores/user-store";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../data-table";
 import { DataTableColumnHeader } from "../column-header";
-import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
+import {
+  CheckIcon,
+  Cross2Icon,
+  OpenInNewWindowIcon,
+} from "@radix-ui/react-icons";
 import PropertiesEdit from "./properties-edit";
 import { useFetch } from "@/hooks/useSWR";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const columns: ColumnDef<PropertiesProps>[] = [
   {
@@ -52,7 +58,16 @@ const columns: ColumnDef<PropertiesProps>[] = [
     cell: ({ row }) => {
       const property = row.original;
 
-      return <PropertiesEdit property={property} />;
+      return (
+        <div className="space-x-1">
+          <PropertiesEdit property={property} />
+          <Link href={`/properties/${property.id}`}>
+            <Button variant="outline" className="h-8 w-8 p-0">
+              <OpenInNewWindowIcon className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      );
     },
   },
 ];

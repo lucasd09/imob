@@ -18,15 +18,19 @@ import {
 } from "@/components/ui/form";
 
 const schema = z.object({
-  name: z.string().min(5, "Insira um nome"),
-  email: z.string().email("Email inválido"),
-  cnpjcpf: z.string().min(11, "CPF/CNPJ Inválidos"),
-  phone: z.string().min(8, "Telefone Inválido"),
-  ierg: z.string().min(9, "IE/RG inválidos"),
+  name: z.string({ required_error: "Obrigatório" }).min(5, "Insira um nome"),
+  email: z.string({ required_error: "Obrigatório" }).email("Email inválido"),
+  cnpjcpf: z
+    .string({ required_error: "Obrigatório" })
+    .min(11, "CPF/CNPJ Inválidos"),
+  phone: z
+    .string({ required_error: "Obrigatório" })
+    .min(8, "Telefone Inválido"),
+  ierg: z.string({ required_error: "Obrigatório" }).min(9, "IE/RG inválidos"),
   pessoa: z.enum(["FISICA", "JURIDICA"], {
     required_error: "Selecione um tipo de pessoa",
   }),
-  birthdate: z.string().refine(
+  birthdate: z.string({ required_error: "Obrigatório" }).refine(
     (value) => {
       return !isNaN(Date.parse(value));
     },
