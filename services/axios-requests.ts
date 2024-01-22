@@ -127,6 +127,16 @@ export async function getOwners(
   } catch {}
 }
 
+export async function getOwner(userId: number, ownerId: number) {
+  try {
+    const res = await axiosClient.get(`/owners/${userId}/${ownerId}`);
+
+    const owner: OwnerProps = res.data;
+
+    return owner;
+  } catch (error) {}
+}
+
 export async function createOwner(data: OwnerProps, userId: number) {
   const res = await axiosClient.post("/owners", {
     name: data.name,

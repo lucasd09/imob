@@ -13,14 +13,10 @@ export default function Properties() {
       <Tabs defaultValue="overview">
         <TabsList className="flex w-fit">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="ownership">Proprietários</TabsTrigger>
           <TabsTrigger value="register">Cadastro</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <PropertiesOverview />
-        </TabsContent>
-        <TabsContent value="ownership">
-          <Ownership />
         </TabsContent>
         <TabsContent value="register">
           <PropertiesRegister />

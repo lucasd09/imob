@@ -1,3 +1,4 @@
+import PropertiesDetail from "@/components/client-components/properties/properties-detail";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,13 +18,13 @@ export default function Page({ params }: { params: { id: number } }) {
         </Link>
       </div>
 
-      <Tabs defaultValue="details">
-        <TabsList className="grid w-fit grid-cols-2">
-          <TabsTrigger value="details">Detalhes</TabsTrigger>
+      <Tabs defaultValue="ownership">
+        <TabsList className="grid w-fit">
           <TabsTrigger value="ownership">Proprietários</TabsTrigger>
         </TabsList>
-        <TabsContent value="details"></TabsContent>
-        <TabsContent value="ownership"></TabsContent>
+        <TabsContent value="ownership">
+          <PropertiesDetail params={params} />
+        </TabsContent>
       </Tabs>
     </div>
   );
