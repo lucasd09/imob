@@ -1,3 +1,4 @@
+import DashboardOverview from "@/components/client-components/dashboard/dashboard-overview";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,7 +19,9 @@ export default function Dashboard() {
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview"></TabsContent>
+        <TabsContent value="overview">
+          <DashboardOverview />
+        </TabsContent>
         <TabsContent value="notifications"></TabsContent>
       </Tabs>
     </div>

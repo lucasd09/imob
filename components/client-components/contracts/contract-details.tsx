@@ -23,7 +23,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFetch } from "@/hooks/useSWR";
 import { format } from "date-fns";
 
 const columns: ColumnDef<OwnershipProps>[] = [
@@ -58,41 +57,50 @@ const columns: ColumnDef<OwnershipProps>[] = [
 
 const schema = z.object({
   value: z.coerce.number().gte(1, "Valor Inválido"),
-  startDate: z.string().refine(
-    (value) => {
-      return !isNaN(Date.parse(value));
-    },
-    {
-      message: "Data de Início inválida.",
-    }
-  ),
-  endDate: z.string().refine(
-    (value) => {
-      return !isNaN(Date.parse(value));
-    },
-    {
-      message: "Data de Término inválida.",
-    }
-  ),
-  dueDate: z.string().refine(
-    (value) => {
-      return !isNaN(Date.parse(value));
-    },
-    {
-      message: "Data de Cobrança inválida.",
-    }
-  ),
+  startDate: z
+    .string()
+    .refine(
+      (value) => {
+        return !isNaN(Date.parse(value));
+      },
+      {
+        message: "Data de Início inválida.",
+      }
+    )
+    .optional(),
+  endDate: z
+    .string()
+    .refine(
+      (value) => {
+        return !isNaN(Date.parse(value));
+      },
+      {
+        message: "Data de Término inválida.",
+      }
+    )
+    .optional(),
+  dueDate: z
+    .string()
+    .refine(
+      (value) => {
+        return !isNaN(Date.parse(value));
+      },
+      {
+        message: "Data de Cobrança inválida.",
+      }
+    )
+    .optional(),
   propertyId: z.coerce.number().gte(1, "Código Inválido"),
-  address: z.string(),
-  number: z.coerce.number(),
-  complement: z.string(),
-  district: z.string(),
-  city: z.string(),
-  uf: z.string(),
+  address: z.string().optional(),
+  number: z.coerce.number().optional(),
+  complement: z.string().optional(),
+  district: z.string().optional(),
+  city: z.string().optional(),
+  uf: z.string().optional(),
   renterId: z.coerce.number().gte(1, "Código Inválido"),
-  renterName: z.string(),
-  renterEmail: z.string(),
-  renterPhone: z.string(),
+  renterName: z.string().optional(),
+  renterEmail: z.string().optional(),
+  renterPhone: z.string().optional(),
 });
 
 type form = z.infer<typeof schema>;
@@ -130,9 +138,12 @@ export default function ContractDetails({
   return (
     <Form {...form}>
       <form
-        className="max-w-7xl w-fit mt-6"
+        className="max-w-screen-2xl w-fit mt-6"
         onSubmit={form.handleSubmit(handleForm)}
       >
+        <div className="flex mb-4 space-x-4">
+          <Button>Salvar</Button>
+        </div>
         <Label className="text-lg">Dados básicos</Label>
         <div className="flex my-4">
           <FormField
@@ -142,7 +153,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Valor</FormLabel>
                 <FormControl>
-                  <Input {...field} className="text-right" />
+                  <Input
+                    {...field}
+                    className="text-right"
+                    defaultValue={data?.value}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -187,9 +202,6 @@ export default function ContractDetails({
               </FormItem>
             )}
           />
-          <Button type="button" onClick={() => console.log(data)}>
-            Salvar
-          </Button>
         </div>
         <Label className="text-lg">Dados do Imóvel</Label>
         <div className="flex my-4">
@@ -199,18 +211,24 @@ export default function ContractDetails({
                 control={form.control}
                 name="propertyId"
                 render={({ field }) => (
-                  <FormItem className="w-fit mr-1">
+                  <FormItem className="w-fit">
                     <FormLabel>ID do Imóvel</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <div className="flex">
+                        <Input
+                          {...field}
+                          defaultValue={data?.property.id}
+                          className="w-28 mr-1"
+                        />
+                        <Button type="button">
+                          <MagnifyingGlassIcon />
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="button">
-                <MagnifyingGlassIcon />
-              </Button>
             </div>
           </div>
           <div className="flex">
@@ -221,7 +239,11 @@ export default function ContractDetails({
                 <FormItem className="w-fit mr-1">
                   <FormLabel>Endereço</FormLabel>
                   <FormControl>
-                    <Input {...field} readOnly />
+                    <Input
+                      {...field}
+                      readOnly
+                      defaultValue={data?.property.address}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -234,7 +256,11 @@ export default function ContractDetails({
                 <FormItem className="w-20 mr-4">
                   <FormLabel>Número</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      {...field}
+                      readOnly
+                      defaultValue={data?.property.number}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -248,7 +274,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Complemento</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    readOnly
+                    defaultValue={data?.property.complement}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -261,7 +291,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Bairro</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    readOnly
+                    defaultValue={data?.property.district}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -274,7 +308,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Cidade</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    readOnly
+                    defaultValue={data?.property.city}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -287,7 +325,7 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Estado</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} readOnly defaultValue={data?.property.uf} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -302,18 +340,24 @@ export default function ContractDetails({
                 control={form.control}
                 name="renterId"
                 render={({ field }) => (
-                  <FormItem className="w-fit mr-1">
+                  <FormItem className="w-fit">
                     <FormLabel>ID do Locatário</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <div className="flex">
+                        <Input
+                          {...field}
+                          defaultValue={data?.renter.id}
+                          className="w-28 mr-1"
+                        />
+                        <Button type="button">
+                          <MagnifyingGlassIcon />
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="button">
-                <MagnifyingGlassIcon />
-              </Button>
             </div>
           </div>
           <div className="flex">
@@ -324,7 +368,11 @@ export default function ContractDetails({
                 <FormItem className="w-fit mr-4">
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      {...field}
+                      readOnly
+                      defaultValue={data?.renter.name}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -337,7 +385,11 @@ export default function ContractDetails({
                 <FormItem className="w-fit mr-4">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      {...field}
+                      readOnly
+                      defaultValue={data?.renter.email}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -348,9 +400,13 @@ export default function ContractDetails({
               name="renterPhone"
               render={({ field }) => (
                 <FormItem className="w-fit mr-4">
-                  <FormLabel>Complemento</FormLabel>
+                  <FormLabel>Telefone</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      {...field}
+                      readOnly
+                      defaultValue={data?.renter.phone}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
