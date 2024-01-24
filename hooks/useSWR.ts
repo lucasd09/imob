@@ -1,6 +1,6 @@
 import { Method } from "axios";
-import useSWR, { SWRConfiguration } from "swr";
-
+import { SWRConfiguration } from "swr";
+import useSWR from "swr/immutable";
 import { axiosClient } from "@/services/axios-client";
 
 const defaultOptions: SWRConfiguration = {

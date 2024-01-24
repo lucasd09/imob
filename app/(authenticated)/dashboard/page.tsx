@@ -13,13 +13,13 @@ export default function Dashboard() {
           <Button>Exportar</Button>
         </div>
       </div>
-      <Tabs defaultValue="account" className="w-fit">
+      <Tabs defaultValue="overview" className="w-fit">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">tab 1</TabsTrigger>
-          <TabsTrigger value="password">tab 2</TabsTrigger>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="notifications">Notificações</TabsTrigger>
         </TabsList>
-        <TabsContent value="account"></TabsContent>
-        <TabsContent value="password"></TabsContent>
+        <TabsContent value="overview"></TabsContent>
+        <TabsContent value="notifications"></TabsContent>
       </Tabs>
     </div>
   );

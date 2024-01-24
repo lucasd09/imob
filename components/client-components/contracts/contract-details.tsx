@@ -98,20 +98,15 @@ const schema = z.object({
 type form = z.infer<typeof schema>;
 
 export default function ContractDetails({
-  params,
+  data,
 }: {
-  params: { id: number };
+  data: ContractDetail | undefined;
 }) {
   const user = useUserStore();
   const { toast } = useToast();
-  const { data } = useFetch<ContractDetail>(
-    `/contracts/${user.id}/${params.id}`
-  );
+
   const form = useForm<form>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      value: data?.value,
-    },
   });
 
   const ownership: OwnershipProps[] | undefined = data?.property.ownership?.map(
