@@ -68,7 +68,6 @@ const columns: ColumnDef<ContractProps>[] = [
       return <p>{date}</p>;
     },
   },
-
   {
     id: "actions",
     cell: ({ row }) => {

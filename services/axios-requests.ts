@@ -331,6 +331,21 @@ export async function createContract(data: ContractDto, userId: number) {
   return res.data;
 }
 
+export async function updateContract(
+  userId: number,
+  contractId: number,
+  data: ContractUpdateDto
+) {
+  const res = await axiosClient.patch(
+    `/contracts/${userId}/${contractId}`,
+    data
+  );
+
+  if (res.status === 200) {
+    return res.data;
+  }
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }

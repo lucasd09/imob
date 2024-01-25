@@ -212,7 +212,7 @@ export default function OwnersEdit({ owner }: { owner: OwnerProps }) {
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
-                  Close
+                  Fechar
                 </Button>
               </DialogClose>
               <Button type="submit">Salvar</Button>

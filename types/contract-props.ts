@@ -26,3 +26,13 @@ type ContractDetail = {
   property: PropertiesProps;
   renter: RenterProps;
 };
+
+type ContractUpdateDto = {
+  value?: number;
+  status?: "EDITING" | "ACTIVE" | "CLOSED";
+  startDate?: string;
+  endDate?: string;
+  dueDate?: string;
+  propertyId?: number;
+  renterId?: number;
+};
