@@ -20,9 +20,9 @@ type ContractDto = {
 type ContractDetail = {
   value: number;
   status: "EDITING" | "ACTIVE" | "CLOSED";
-  startDate: string;
-  endDate: string;
-  dueDate: string;
+  startDate: string | Date;
+  endDate: string | Date;
+  dueDate: string | Date;
   property: PropertiesProps;
   renter: RenterProps;
 };
@@ -30,9 +30,9 @@ type ContractDetail = {
 type ContractUpdateDto = {
   value?: number;
   status?: "EDITING" | "ACTIVE" | "CLOSED";
-  startDate?: string;
-  endDate?: string;
-  dueDate?: string;
+  startDate?: string | Date;
+  endDate?: string | Date;
+  dueDate?: string | Date;
   propertyId?: number;
   renterId?: number;
 };

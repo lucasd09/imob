@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
 import { useUserStore } from "@/stores/user-store";
 import { createOwner } from "@/services/axios-requests";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import {
   Form,
@@ -44,7 +44,6 @@ type form = z.infer<typeof schema>;
 
 export default function OwnersRegister() {
   const user = useUserStore();
-  const { toast } = useToast();
 
   const form = useForm<form>({ resolver: zodResolver(schema) });
 
@@ -65,8 +64,7 @@ export default function OwnersRegister() {
     if (owner) {
       form.reset();
 
-      return toast({
-        title: "Sucesso",
+      return toast("Sucesso", {
         description: "Locatário criado com êxito.",
       });
     }

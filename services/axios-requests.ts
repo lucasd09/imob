@@ -346,6 +346,55 @@ export async function updateContract(
   }
 }
 
+export function generateInstallments(
+  data: ContractDetail | undefined
+): InstallmentProps[] {
+  const installments: InstallmentProps[] = [];
+
+  if (data) {
+    for (
+      let currentDate = new Date(data.startDate);
+      currentDate <= new Date(data.endDate);
+      currentDate.setMonth(currentDate.getMonth() + 1)
+    ) {
+      const dueDate = currentDate.toISOString();
+      installments.push({
+        number: installments.length + 1,
+        value: data.value,
+        dueDate,
+        paid: false,
+      });
+    }
+  }
+  return installments;
+}
+
+export async function createBilling(
+  installments: InstallmentProps[],
+  userId: number,
+  contractId: string,
+  type: "RENT" | "INSURANCE"
+) {
+  try {
+    const data: BillingDto = {
+      type,
+      user: { connect: { id: userId } },
+      contract: { connect: { id: parseInt(contractId) } },
+      installments: { createMany: { data: installments } },
+    };
+
+    console.log(data);
+
+    const res = await axiosClient.post(`/billings`, data);
+
+    if (res.status === 201) {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
 export function logout() {
   destroyCookie(undefined, "imob-token");
 }

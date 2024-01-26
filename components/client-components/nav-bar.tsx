@@ -12,6 +12,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Label } from "../ui/label";
 import { useEffect } from "react";
+import { destroyCookie } from "nookies";
 
 export default function Navbar() {
   useEffect(() => {
@@ -20,6 +21,10 @@ export default function Navbar() {
 
   const user = useUserStore();
 
+  async function logout() {
+    destroyCookie(undefined, "imob-token");
+  }
+
   return (
     <div className="flex px-14 h-14 items-center justify-end bg-secondary border">
       <DropdownMenu>
@@ -27,7 +32,10 @@ export default function Navbar() {
           <div className="flex items-center cursor-pointer">
             <Label className="mr-4">Olá, {user.username}</Label>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarImage
+                src="https://github.com/lucasd09.png"
+                alt="@lucasd09"
+              />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </div>
@@ -40,7 +48,7 @@ export default function Navbar() {
             <DropdownMenuItem>Configurações</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Sair</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => logout()}>Sair</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

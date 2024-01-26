@@ -1,10 +1,18 @@
+"use client";
 import DashboardOverview from "@/components/client-components/dashboard/dashboard-overview";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFetch } from "@/hooks/useSWR";
+import { useUserStore } from "@/stores/user-store";
 
 export default function Dashboard() {
+  const user = useUserStore();
+  const { data: activeContracts } = useFetch<number>(
+    `/metrics/contracts/${user.id}`
+  );
+
   return (
     <div className="px-8 py-6">
       <div className="flex justify-between mb-4">
@@ -15,12 +23,12 @@ export default function Dashboard() {
         </div>
       </div>
       <Tabs defaultValue="overview" className="w-fit">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-fit grid-cols-2">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <DashboardOverview />
+          <DashboardOverview activeContracts={activeContracts} />
         </TabsContent>
         <TabsContent value="notifications"></TabsContent>
       </Tabs>

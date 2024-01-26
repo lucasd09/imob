@@ -40,7 +40,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
@@ -92,7 +92,13 @@ const columns: ColumnDef<OwnershipProps>[] = [
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction
-                onClick={async () => await deleteOwnership(id!)}
+                onClick={async () => {
+                  if (await deleteOwnership(id!)) {
+                    return toast("Sucesso", {
+                      description: "Proprietário removido com êxito.",
+                    });
+                  }
+                }}
               >
                 Continuar
               </AlertDialogAction>
@@ -123,7 +129,6 @@ export default function PropertiesDetail({
   params: { id: string };
 }) {
   const user = useUserStore();
-  const { toast } = useToast();
   const { data, mutate } = useFetch<OwnershipProps[]>(
     `/properties/ownerships/${user.id}/${params.id}`
   );
@@ -196,8 +201,7 @@ export default function PropertiesDetail({
     if (owner) {
       mutate();
       form.reset();
-      return toast({
-        title: "Sucesso",
+      return toast("Sucesso", {
         description: "Proprietário adicionado com êxito.",
       });
     }

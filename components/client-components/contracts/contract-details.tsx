@@ -10,7 +10,7 @@ import {
 import { DataTable } from "../data-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../column-header";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -117,7 +117,6 @@ export default function ContractDetails({
   contractId: number;
 }) {
   const user = useUserStore();
-  const { toast } = useToast();
   const { data, mutate } = useFetch<ContractDetail>(
     `/contracts/${user.id}/${contractId}`
   );
@@ -181,12 +180,6 @@ export default function ContractDetails({
     const dirtyFields = form.formState.dirtyFields;
     const updatedValues: ContractUpdateDto = {};
 
-    // Object.entries(dirtyFields).forEach(([field, isDirty]) => {
-    //   if (isDirty && formData[field as keyof form] !== undefined) {
-    //     updatedValues[field] = formData[field];
-    //   }
-    // });
-
     if (dirtyFields.propertyId) {
       updatedValues.propertyId = formData.propertyId;
     }
@@ -201,8 +194,7 @@ export default function ContractDetails({
 
     mutate();
 
-    return toast({
-      title: "Sucesso",
+    return toast("Sucesso", {
       description: "Contrato atualizado com êxito.",
     });
   }
@@ -242,7 +234,11 @@ export default function ContractDetails({
               Encerrar contrato
             </Button>
           ) : (
-            <ContractActivation disabled={form.formState.isDirty} data={data} />
+            <ContractActivation
+              disabled={form.formState.isDirty}
+              data={data}
+              contractId={contractId}
+            />
           )}
         </div>
         <h2 className="text-lg font-medium">Dados básicos</h2>

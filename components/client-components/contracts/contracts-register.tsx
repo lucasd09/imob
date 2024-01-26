@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "@/stores/user-store";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -51,7 +51,6 @@ type form = z.infer<typeof schema>;
 
 export default function ContractsRegister() {
   const user = useUserStore();
-  const { toast } = useToast();
 
   const {
     register,
@@ -79,8 +78,7 @@ export default function ContractsRegister() {
     if (contract) {
       reset();
 
-      return toast({
-        title: "Sucesso",
+      return toast("Sucesso", {
         description: "Contrato criado com êxito.",
       });
     }
