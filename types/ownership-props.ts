@@ -16,7 +16,7 @@ type OwnershipDto = {
 type CreateOwnershipDto = {
   cut: number;
   isMainOwner?: boolean;
-  userId: number;
-  propertyId: number;
-  ownerId?: number;
+  user: { connect: { id: number } };
+  property: { connect: { id: number } };
+  owner?: { connect: { id: number } };
 };

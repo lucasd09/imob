@@ -155,15 +155,22 @@ export default function PropertiesDetail({
       try {
         const owner = await getOwner(user.id, form.getValues("ownerId"));
 
-        if (ownership?.find((owners) => owners.ownerId === owner?.id)) {
-          form.setError("ownerId", {
-            type: "value",
-            message: "Locador já cadastrado",
-          });
-          form.setValue("name", "");
+        if (owner) {
+          if (ownership?.find((owners) => owners.ownerId === owner?.id)) {
+            form.setError("ownerId", {
+              type: "value",
+              message: "Locador já cadastrado",
+            });
+            form.setValue("name", "");
+          } else {
+            form.clearErrors("ownerId");
+            form.setValue("name", owner?.name);
+          }
         } else {
-          form.clearErrors("ownerId");
-          form.setValue("name", owner?.name);
+          form.setError("ownerId", {
+            type: "validate",
+            message: "Locador não encontrado",
+          });
         }
       } catch (error) {}
     }
@@ -174,35 +181,48 @@ export default function PropertiesDetail({
     try {
       const owner = await getOwner(user.id, ownerId);
 
-      if (ownership?.find((owners) => owners.ownerId === owner?.id)) {
-        form.setError("ownerId", {
-          type: "value",
-          message: "Locador já inserido",
-        });
-        form.setValue("name", "");
+      if (owner) {
+        if (ownership?.find((owners) => owners.ownerId === owner?.id)) {
+          form.setError("ownerId", {
+            type: "value",
+            message: "Locador já cadastrado",
+          });
+          form.setValue("name", "");
+        } else {
+          form.clearErrors("ownerId");
+          form.setValue("name", owner?.name);
+        }
       } else {
-        form.clearErrors("ownerId");
-        form.setValue("name", owner?.name);
+        form.setError("ownerId", {
+          type: "validate",
+          message: "Locador não encontrado",
+        });
       }
     } catch (error) {}
   }
 
   async function handleForm(formData: form) {
-    const owner = await addOwnership([
-      {
-        cut: formData.cut,
-        isMainOwner: formData.isMainOwner,
-        userId: user.id,
-        propertyId: parseInt(params.id),
-        ownerId: formData.ownerId,
-      },
-    ]);
+    const owner = await addOwnership({
+      cut: formData.cut,
+      isMainOwner: formData.isMainOwner,
+      user: { connect: { id: user.id } },
+      property: { connect: { id: parseInt(params.id) } },
+      owner: { connect: { id: formData.ownerId } },
+    });
 
     if (owner) {
       mutate();
       form.reset();
       return toast("Sucesso", {
         description: "Proprietário adicionado com êxito.",
+      });
+    } else {
+      form.setError("ownerId", {
+        type: "validate",
+        message: "Locador não encontrado",
+      });
+      return toast("Erro", {
+        description: "Locador não encontrado na base de dados.",
       });
     }
   }
@@ -227,7 +247,7 @@ export default function PropertiesDetail({
                       <Input
                         {...field}
                         type="search"
-                        onKeyDown={(event) => handleKeyDown(event)}
+                        onBlur={() => fetchOwner()}
                       />
                       <Button
                         onClick={async () => await fetchOwner()}

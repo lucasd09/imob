@@ -50,17 +50,7 @@ export async function getRenter(
   const res = await axiosClient.get(`/renters/${userId}/${id}`);
 
   if (res.status === 200) {
-    const renter: RenterProps = {
-      id: res.data.id,
-      name: res.data.name,
-      email: res.data.email,
-      userId: res.data.userId,
-      birthdate: res.data.birthdate,
-      cnpjcpf: res.data.cnpjcpf,
-      ierg: res.data.ierg,
-      phone: res.data.phone,
-      pessoa: res.data.pessoa,
-    };
+    const renter: RenterProps = res.data;
     return renter;
   }
 }
@@ -272,7 +262,7 @@ export async function getOwnerships(
   } catch (error) {}
 }
 
-export async function addOwnership(data: CreateOwnershipDto[]) {
+export async function addOwnership(data: CreateOwnershipDto) {
   try {
     const res = await axiosClient.post(`/properties/ownerships`, data);
 
@@ -316,19 +306,26 @@ export async function getContracts(userId: number) {
   }
 }
 
-export async function createContract(data: ContractDto, userId: number) {
-  const res = await axiosClient.post("/contracts", {
-    value: data.value,
-    status: data.status,
-    startDate: new Date(data.startDate),
-    endDate: new Date(data.endDate),
-    dueDate: new Date(data.dueDate),
-    user: { connect: { id: userId } },
-    property: { connect: { id: data.propertyId } },
-    renter: { connect: { id: data.renterId } },
-  });
+export async function createContract(
+  data: ContractDto,
+  userId: number
+): Promise<boolean | undefined> {
+  try {
+    const res = await axiosClient.post("/contracts", {
+      value: data.value,
+      status: data.status,
+      startDate: new Date(data.startDate),
+      endDate: new Date(data.endDate),
+      dueDate: new Date(data.dueDate),
+      user: { connect: { id: userId } },
+      property: { connect: { id: data.propertyId } },
+      renter: { connect: { id: data.renterId } },
+    });
 
-  return res.data;
+    if (res.status === 201) {
+      return true;
+    }
+  } catch (err) {}
 }
 
 export async function updateContract(
