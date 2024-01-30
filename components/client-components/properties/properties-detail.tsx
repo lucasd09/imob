@@ -202,25 +202,27 @@ export default function PropertiesDetail({
   }
 
   async function handleForm(formData: form) {
-    const owner = await addOwnership({
-      cut: formData.cut,
-      isMainOwner: formData.isMainOwner,
-      user: { connect: { id: user.id } },
-      property: { connect: { id: parseInt(params.id) } },
-      owner: { connect: { id: formData.ownerId } },
-    });
+    try {
+      await addOwnership({
+        cut: formData.cut,
+        isMainOwner: formData.isMainOwner,
+        user: { connect: { id: user.id } },
+        property: { connect: { id: parseInt(params.id) } },
+        owner: { connect: { id: formData.ownerId } },
+      });
 
-    if (owner) {
       mutate();
       form.reset();
+
       return toast("Sucesso", {
         description: "Proprietário adicionado com êxito.",
       });
-    } else {
+    } catch (error) {
       form.setError("ownerId", {
         type: "validate",
         message: "Locador não encontrado",
       });
+
       return toast("Erro", {
         description: "Locador não encontrado na base de dados.",
       });
