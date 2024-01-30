@@ -380,8 +380,6 @@ export async function createBilling(
       installments: { createMany: { data: installments } },
     };
 
-    console.log(data);
-
     const res = await axiosClient.post(`/billings`, data);
 
     if (res.status === 201) {

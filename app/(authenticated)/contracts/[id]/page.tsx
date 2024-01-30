@@ -29,7 +29,7 @@ export default function Page({ params }: { params: { id: number } }) {
           <ContractDetails contractId={params.id} />
         </TabsContent>
         <TabsContent value="installments">
-          <ContractInstallments />
+          <ContractInstallments id={params.id} />
         </TabsContent>
       </Tabs>
     </div>

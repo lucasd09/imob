@@ -20,4 +20,5 @@ type InstallmentProps = {
   dueDate: string | Date;
   paid: boolean;
   billingId?: number;
+  type?: "RENT" | "INSURANCE";
 };

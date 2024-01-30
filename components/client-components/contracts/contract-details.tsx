@@ -190,13 +190,20 @@ export default function ContractDetails({
       updatedValues.value = formData.value;
     }
 
-    await updateContract(user.id, contractId, updatedValues);
+    try {
+      await updateContract(user.id, contractId, updatedValues);
 
-    mutate();
+      mutate();
 
-    return toast("Sucesso", {
-      description: "Contrato atualizado com êxito.",
-    });
+      return toast("Sucesso", {
+        description: "Contrato atualizado com êxito.",
+      });
+    } catch (error) {
+      return toast("Erro", {
+        description:
+          "ID do Imóvel ou do locatário não foi encontrado, verifique.",
+      });
+    }
   }
 
   async function fetchProperty() {

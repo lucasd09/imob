@@ -87,6 +87,8 @@ export default function ContractsOverview() {
   const user = useUserStore();
   const { data } = useFetch<ContractProps[]>(`/contracts/${user.id}`);
 
+  console.table(data);
+
   return (
     <div>
       <DataTable columns={columns} data={data || []} />
