@@ -2,7 +2,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../column-header";
 import Link from "next/link";
-import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
+import {
+  CheckCircledIcon,
+  CrossCircledIcon,
+  OpenInNewWindowIcon,
+} from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "../data-table";
 import { useUserStore } from "@/stores/user-store";
@@ -42,11 +46,25 @@ const columns: ColumnDef<ContractProps>[] = [
 
       switch (status) {
         case "EDITING":
-          return <p>Em edição</p>;
+          return (
+            <div>
+              <p>Em edição</p>
+            </div>
+          );
         case "ACTIVE":
-          return <p>Ativo</p>;
+          return (
+            <div className="text-emerald-700 font-medium flex items-center space-x-1">
+              <CheckCircledIcon />
+              <p>Ativo</p>
+            </div>
+          );
         case "CLOSED":
-          return <p>Fechado</p>;
+          return (
+            <div className="text-red-600 font-medium flex items-center space-x-1">
+              <CrossCircledIcon />
+              <p>Fechado</p>
+            </div>
+          );
       }
     },
   },
@@ -86,8 +104,6 @@ const columns: ColumnDef<ContractProps>[] = [
 export default function ContractsOverview() {
   const user = useUserStore();
   const { data } = useFetch<ContractProps[]>(`/contracts/${user.id}`);
-
-  console.table(data);
 
   return (
     <div>

@@ -350,7 +350,7 @@ export function generateInstallments(
 
   if (data) {
     for (
-      let currentDate = new Date(data.startDate);
+      let currentDate = new Date(data.dueDate);
       currentDate <= new Date(data.endDate);
       currentDate.setMonth(currentDate.getMonth() + 1)
     ) {

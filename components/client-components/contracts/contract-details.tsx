@@ -5,6 +5,7 @@ import { useUserStore } from "@/stores/user-store";
 import {
   CheckIcon,
   Cross2Icon,
+  CrossCircledIcon,
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
 import { DataTable } from "../data-table";
@@ -30,6 +31,8 @@ import {
   updateContract,
 } from "@/services/axios-requests";
 import ContractActivation from "./contract-activation";
+import ContractClosing from "./contract-close";
+import { useMemo } from "react";
 
 const columns: ColumnDef<OwnershipProps>[] = [
   {
@@ -228,6 +231,28 @@ export default function ContractDetails({
     form.setValue("renterPhone", renter?.phone);
   }
 
+  type status = "EDITING" | "ACTIVE" | "CLOSED";
+
+  const statusRender = useMemo<{ [key in status]: JSX.Element }>(
+    () => ({
+      EDITING: (
+        <ContractActivation
+          disabled={form.formState.isDirty}
+          data={data}
+          contractId={contractId}
+        />
+      ),
+      ACTIVE: <ContractClosing contractId={contractId} />,
+      CLOSED: (
+        <div className="text-red-600 font-medium flex items-center space-x-1">
+          <CrossCircledIcon />
+          <p>Contrato encerrado</p>
+        </div>
+      ),
+    }),
+    [contractId, data, form.formState.isDirty]
+  );
+
   return (
     <Form {...form}>
       <form
@@ -236,17 +261,7 @@ export default function ContractDetails({
       >
         <div className="flex mb-4 space-x-4">
           <Button disabled={!form.formState.isDirty}>Salvar</Button>
-          {data?.status === "ACTIVE" ? (
-            <Button variant={"outline"} type="button">
-              Encerrar contrato
-            </Button>
-          ) : (
-            <ContractActivation
-              disabled={form.formState.isDirty}
-              data={data}
-              contractId={contractId}
-            />
-          )}
+          {data && statusRender[data.status]}
         </div>
         <h2 className="text-lg font-medium">Dados básicos</h2>
         <div className="flex my-4">
@@ -257,7 +272,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Valor</FormLabel>
                 <FormControl>
-                  <Input {...field} className="text-right" />
+                  <Input
+                    {...field}
+                    className="text-right"
+                    readOnly={data?.status == "CLOSED"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -270,7 +289,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Data de início</FormLabel>
                 <FormControl>
-                  <Input {...field} type="date" />
+                  <Input
+                    {...field}
+                    type="date"
+                    readOnly={data?.status == "CLOSED"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -283,7 +306,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Data de Término</FormLabel>
                 <FormControl>
-                  <Input {...field} type="date" />
+                  <Input
+                    {...field}
+                    type="date"
+                    readOnly={data?.status == "CLOSED"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -296,7 +323,11 @@ export default function ContractDetails({
               <FormItem className="w-fit mr-4">
                 <FormLabel>Início da Cobrança</FormLabel>
                 <FormControl>
-                  <Input {...field} type="date" />
+                  <Input
+                    {...field}
+                    type="date"
+                    readOnly={data?.status == "CLOSED"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -315,8 +346,16 @@ export default function ContractDetails({
                     <FormLabel>ID do Imóvel</FormLabel>
                     <FormControl>
                       <div className="flex">
-                        <Input {...field} className="w-28 mr-1" />
-                        <Button type="button" onClick={() => fetchProperty()}>
+                        <Input
+                          {...field}
+                          className="w-28 mr-1"
+                          readOnly={data?.status == "CLOSED"}
+                        />
+                        <Button
+                          type="button"
+                          onClick={() => fetchProperty()}
+                          disabled={data?.status == "CLOSED"}
+                        >
                           <MagnifyingGlassIcon />
                         </Button>
                       </div>
@@ -420,8 +459,16 @@ export default function ContractDetails({
                     <FormLabel>ID do Locatário</FormLabel>
                     <FormControl>
                       <div className="flex">
-                        <Input {...field} className="w-28 mr-1" />
-                        <Button type="button" onClick={() => fetchRenter()}>
+                        <Input
+                          {...field}
+                          className="w-28 mr-1"
+                          readOnly={data?.status == "CLOSED"}
+                        />
+                        <Button
+                          type="button"
+                          onClick={() => fetchRenter()}
+                          disabled={data?.status == "CLOSED"}
+                        >
                           <MagnifyingGlassIcon />
                         </Button>
                       </div>

@@ -64,9 +64,10 @@ export default function ContractActivation({
       await createBilling(installments, user.id, String(contractId), "RENT")
     ) {
       await updateContract(user.id, contractId, { status: "ACTIVE" });
-      toast("Sucesso", { description: "Contrato ativado com sucesso" });
+
+      return toast("Sucesso", { description: "Contrato ativado com sucesso" });
     } else {
-      toast("Erro", {
+      return toast("Erro", {
         description: "Algo deu errado com a ativação do contrato",
       });
     }

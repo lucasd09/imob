@@ -10,7 +10,11 @@ const columns: ColumnDef<InstallmentProps>[] = [
   {
     accessorKey: "billingId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
+      <DataTableColumnHeader
+        column={column}
+        title="ID do Lançamento"
+        className="w-10"
+      />
     ),
   },
   { accessorKey: "number", header: "Parcela" },

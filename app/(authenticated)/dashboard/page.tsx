@@ -9,9 +9,7 @@ import { useUserStore } from "@/stores/user-store";
 
 export default function Dashboard() {
   const user = useUserStore();
-  const { data: activeContracts } = useFetch<number>(
-    `/metrics/contracts/${user.id}`
-  );
+  const { data } = useFetch<DashboardProps>(`/metrics/contracts/${user.id}`);
 
   return (
     <div className="px-8 py-6">
@@ -28,7 +26,7 @@ export default function Dashboard() {
           <TabsTrigger value="notifications">Notificações</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <DashboardOverview activeContracts={activeContracts} />
+          <DashboardOverview metrics={data} />
         </TabsContent>
         <TabsContent value="notifications"></TabsContent>
       </Tabs>

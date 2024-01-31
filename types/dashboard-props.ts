@@ -1,3 +1,5 @@
 type DashboardProps = {
-  activeContracts: number | undefined;
+  active: number | undefined;
+  editing: number | undefined;
+  closed: number | undefined;
 };
