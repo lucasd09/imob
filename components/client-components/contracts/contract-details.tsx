@@ -244,7 +244,7 @@ export default function ContractDetails({
       ),
       ACTIVE: <ContractClosing contractId={contractId} />,
       CLOSED: (
-        <div className="text-red-600 font-medium flex items-center space-x-1">
+        <div className="text-red-600 font-medium flex items-center space-x-1 bg-red-100 rounded w-fit px-2">
           <CrossCircledIcon />
           <p>Contrato encerrado</p>
         </div>

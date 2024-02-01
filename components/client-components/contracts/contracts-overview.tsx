@@ -53,14 +53,14 @@ const columns: ColumnDef<ContractProps>[] = [
           );
         case "ACTIVE":
           return (
-            <div className="text-emerald-700 font-medium flex items-center space-x-1">
+            <div className="text-emerald-700 font-medium flex items-center space-x-1 bg-emerald-100 rounded w-fit px-2">
               <CheckCircledIcon />
               <p>Ativo</p>
             </div>
           );
         case "CLOSED":
           return (
-            <div className="text-red-600 font-medium flex items-center space-x-1">
+            <div className="text-red-600 font-medium flex items-center space-x-1 bg-red-100 rounded w-fit px-2">
               <CrossCircledIcon />
               <p>Fechado</p>
             </div>

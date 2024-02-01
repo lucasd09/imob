@@ -1,9 +1,5 @@
-import { setCookie, parseCookies, destroyCookie } from "nookies";
+import { destroyCookie } from "nookies";
 import { ZipCodeClient, axiosClient } from "./axios-client";
-import axios from "axios";
-import { format } from "date-fns";
-
-const { "imob-token": token } = parseCookies();
 
 export async function signInRequest({ email, password }: SignInProps) {
   try {

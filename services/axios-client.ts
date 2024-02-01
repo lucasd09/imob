@@ -4,7 +4,7 @@ import { parseCookies } from "nookies";
 const { "imob-token": token } = parseCookies();
 
 export const axiosClient = axios.create({
-  baseURL: process.env.URLAPI,
+  baseURL: "https://imob-api.onrender.com",
 });
 
 export const ZipCodeClient = axios.create({

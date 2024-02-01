@@ -3,7 +3,7 @@ import { axiosClient } from "@/services/axios-client";
 import { signInRequest } from "@/services/axios-requests";
 import { useUserStore } from "@/stores/user-store";
 import { setCookie } from "nookies";
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { jwtDecode } from "jwt-decode";
 
 type AuthContextType = {
