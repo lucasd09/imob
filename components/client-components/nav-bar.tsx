@@ -13,6 +13,8 @@ import {
 import { Label } from "../ui/label";
 import { useEffect } from "react";
 import { destroyCookie } from "nookies";
+import { ThemeToggle } from "./theme-toggle";
+import { Separator } from "../ui/separator";
 
 export default function Navbar() {
   useEffect(() => {
@@ -26,7 +28,9 @@ export default function Navbar() {
   }
 
   return (
-    <div className="flex px-14 h-14 items-center justify-end bg-secondary border">
+    <div className="flex px-14 h-14 items-center justify-end space-x-5 bg-secondary dark:bg-transparent border border-l-0">
+      <ThemeToggle />
+      <Separator orientation="vertical" className="h-8" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center cursor-pointer">
