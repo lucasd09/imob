@@ -23,7 +23,7 @@ export default function Page({ params }: { params: { id: number } }) {
           <TabsTrigger value="ownership">Proprietários</TabsTrigger>
         </TabsList>
         <TabsContent value="ownership">
-          <PropertiesDetail params={params} />
+          <PropertiesDetail params={{ id: String(params.id) }} />
         </TabsContent>
       </Tabs>
     </div>
