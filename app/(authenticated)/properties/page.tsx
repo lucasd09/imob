@@ -1,4 +1,3 @@
-import Ownership from "@/components/client-components/properties/ownership";
 import PropertiesOverview from "@/components/client-components/properties/properties-overview";
 import PropertiesRegister from "@/components/client-components/properties/properties-register";
 import { Label } from "@/components/ui/label";
