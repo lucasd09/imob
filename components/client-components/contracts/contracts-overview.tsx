@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   CheckCircledIcon,
   CrossCircledIcon,
+  FileTextIcon,
   OpenInNewWindowIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
@@ -47,7 +48,8 @@ const columns: ColumnDef<ContractProps>[] = [
       switch (status) {
         case "EDITING":
           return (
-            <div>
+            <div className="font-medium flex items-center space-x-1 bg-slate-100 text-slate-900 rounded w-fit px-2">
+              <FileTextIcon />
               <p>Em edição</p>
             </div>
           );

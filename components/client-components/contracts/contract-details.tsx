@@ -275,7 +275,7 @@ export default function ContractDetails({
                   <Input
                     {...field}
                     className="text-right"
-                    readOnly={data?.status == "CLOSED"}
+                    readOnly={data?.status != "EDITING"}
                   />
                 </FormControl>
                 <FormMessage />
@@ -292,7 +292,7 @@ export default function ContractDetails({
                   <Input
                     {...field}
                     type="date"
-                    readOnly={data?.status == "CLOSED"}
+                    readOnly={data?.status != "EDITING"}
                   />
                 </FormControl>
                 <FormMessage />
@@ -309,7 +309,7 @@ export default function ContractDetails({
                   <Input
                     {...field}
                     type="date"
-                    readOnly={data?.status == "CLOSED"}
+                    readOnly={data?.status != "EDITING"}
                   />
                 </FormControl>
                 <FormMessage />
@@ -326,7 +326,7 @@ export default function ContractDetails({
                   <Input
                     {...field}
                     type="date"
-                    readOnly={data?.status == "CLOSED"}
+                    readOnly={data?.status != "EDITING"}
                   />
                 </FormControl>
                 <FormMessage />
@@ -349,12 +349,12 @@ export default function ContractDetails({
                         <Input
                           {...field}
                           className="w-28 mr-1"
-                          readOnly={data?.status == "CLOSED"}
+                          readOnly={data?.status != "EDITING"}
                         />
                         <Button
                           type="button"
                           onClick={() => fetchProperty()}
-                          disabled={data?.status == "CLOSED"}
+                          disabled={data?.status != "EDITING"}
                         >
                           <MagnifyingGlassIcon />
                         </Button>
@@ -462,12 +462,12 @@ export default function ContractDetails({
                         <Input
                           {...field}
                           className="w-28 mr-1"
-                          readOnly={data?.status == "CLOSED"}
+                          readOnly={data?.status != "EDITING"}
                         />
                         <Button
                           type="button"
                           onClick={() => fetchRenter()}
-                          disabled={data?.status == "CLOSED"}
+                          disabled={data?.status != "EDITING"}
                         >
                           <MagnifyingGlassIcon />
                         </Button>

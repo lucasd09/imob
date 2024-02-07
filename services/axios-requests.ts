@@ -200,19 +200,10 @@ export async function createProperty(data: PropertiesProps, userId: number) {
   return res;
 }
 
-export async function updateProperty(data: PropertiesProps, userId: number) {
+export async function updateProperty(data: UpdatePropertyDto, userId: number) {
   const res: PropertiesProps = await axiosClient.patch(
     `/properties/${userId}/${data.id}`,
-    {
-      address: data.address,
-      number: data.number,
-      avaliable: data.avaliable,
-      complement: data.complement,
-      district: data.district,
-      uf: data.uf,
-      zipcode: data.zipcode,
-      city: data.city,
-    }
+    data
   );
 
   return res;

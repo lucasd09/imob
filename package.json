@@ -2,7 +2,7 @@
   "name": "imob",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://imob-api.onrender.com",
+  "proxy": "http://localhost:5000",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

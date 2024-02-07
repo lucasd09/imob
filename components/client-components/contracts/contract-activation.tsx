@@ -16,6 +16,7 @@ import {
   createBilling,
   generateInstallments,
   updateContract,
+  updateProperty,
 } from "@/services/axios-requests";
 import { toast } from "sonner";
 import { useUserStore } from "@/stores/user-store";
@@ -64,6 +65,11 @@ export default function ContractActivation({
       await createBilling(installments, user.id, String(contractId), "RENT")
     ) {
       await updateContract(user.id, contractId, { status: "ACTIVE" });
+
+      await updateProperty(
+        { id: data?.property.id, avaliable: false },
+        user.id
+      );
 
       return toast("Sucesso", { description: "Contrato ativado com sucesso" });
     } else {

@@ -50,6 +50,7 @@ const schema = z.object({
   propertyId: z.coerce.number().gte(1, "Código Inválido"),
   address: z.string(),
   number: z.coerce.number(),
+  PropertyAvaliable: z.boolean(),
   renterId: z.coerce.number().gte(1, "Código Inválido"),
   renterName: z.string(),
 });
@@ -75,6 +76,13 @@ export default function ContractsRegister() {
   });
 
   async function handleForm(data: form) {
+    if (!data.PropertyAvaliable) {
+      form.setFocus("propertyId");
+      return toast("Erro", {
+        description: "O imóvel está indisponível.",
+      });
+    }
+
     const contract = await createContract(
       {
         value: data.value,
@@ -109,6 +117,7 @@ export default function ContractsRegister() {
       if (property) {
         form.setValue("address", property?.address || "");
         form.setValue("number", property?.number || 0);
+        form.setValue("PropertyAvaliable", property?.avaliable);
       } else {
         form.setError("propertyId", {
           type: "onBlur",
